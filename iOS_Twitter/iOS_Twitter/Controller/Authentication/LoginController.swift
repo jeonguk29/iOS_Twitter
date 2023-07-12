@@ -20,6 +20,39 @@ class LoginController: UIViewController {
         return iv
     }()
     
+    
+    private lazy var emailContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .red
+        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        let iv = UIImageView()
+        iv.image = #imageLiteral(resourceName: "mail")
+        // 하위 뷰로 넣어주기
+        view.addSubview(iv)
+        iv.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 8, paddingBottom: 8)
+        iv.setDimensions(width: 24, height: 24)
+        
+        return view
+    }()
+    
+    private lazy var passwordContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemPurple
+        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        let iv = UIImageView()
+        iv.image = #imageLiteral(resourceName: "ic_lock_outline_white_2x")
+        // 하위 뷰로 넣어주기
+        view.addSubview(iv)
+        iv.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 8, paddingBottom: 8)
+        iv.setDimensions(width: 24, height: 24)
+        
+        return view
+    }()
+    
+    
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +75,18 @@ class LoginController: UIViewController {
         logoImageView.centerX(inView: view, topAnchor: view.safeAreaLayoutGuide.topAnchor)
         // 오토레아웃 편하게 사용하기위해 만든 함수 중앙정렬, 어디기준으로 할건지, 기준에서 어디만큼 위치할건지 paddingTop: 0 이 기분값임
         logoImageView.setDimensions(width: 150, height: 150)
-        // UIView 프로토콜에 추가된 확장 함수(extension function)로, 주어진 view의 너비와 높이를 변경합니다. 
+        // UIView 프로토콜에 추가된 확장 함수(extension function)로, 주어진 view의 너비와 높이를 변경합니다.
+        
+        // 스택뷰로 두게의 컨테이너를 묶어주기
+        let stack = UIStackView(arrangedSubviews: [emailContainerView, passwordContainerView])
+        stack.axis = .vertical // 세로축 정렬
+        stack.spacing = 8
+        
+        // 두개의 컨테이너의 각각의 50의 높이를 주었기 때문에 스택은 알아서 높이를 잡을 것임
+        // 오토레이 아웃의 기본은 높이,너비, 제약조건임
+        view.addSubview(stack)
+        // 너비를 따로 지정해주지 않아서 기본적으로 스택이 가진 너비 왼쪽, 오른쪽 오토레이아웃 만큼 크기를 갖게 됨
+        stack.anchor(top: logoImageView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor)
     }
     
     

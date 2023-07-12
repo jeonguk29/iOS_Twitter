@@ -11,18 +11,49 @@ class MainTabController: UITabBarController {
 
     
     // MARK: - Properties
-    
+    let actionButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .white
+        //button.backgroundColor = .blue
+        button.backgroundColor = .twitterBlue
+        button.setImage(UIImage(named: "new_tweet"), for: .normal)
+        // 버튼 액션 추가
+        button.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
+        return button
+    }()
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureViewControllers()
-        tabBar.backgroundColor = .systemGray5
+        configureUI()
     }
     
+    
+    // MARK: - Selectors
+    @objc func actionButtonTapped(){
+        print(1234)
+    }
 
     
     // MARK: - Helpers
+    func configureUI() {
+        view.addSubview(actionButton)
+//        actionButton.translatesAutoresizingMaskIntoConstraints = false
+//        actionButton.heightAnchor.constraint(equalToConstant: 56).isActive = true
+//        actionButton.widthAnchor.constraint(equalToConstant: 56).isActive = true
+//        actionButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -64).isActive = true
+//        actionButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
+
+        // ⭐️ 해당 한줄의 코드가 위 코드를 대체함
+        // safeAreaLayoutGuide는 safeArea를 말함
+        actionButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,right: view.rightAnchor, paddingBottom: 64, paddingRight: 16, width: 56, height: 56)
+        
+        actionButton.layer.cornerRadius = 56/2 // 높이 나누기 2 하면 원형 모양이 됨
+                
+        
+    }
+    
     
     func configureViewControllers() {
         let feed = FeedController()
@@ -31,14 +62,14 @@ class MainTabController: UITabBarController {
         
         
         let explore = ExploreController()
-        let nav2 = templeteNavigationController(image: UIImage(named: "home_unselected"), rootViewController: explore)
+        let nav2 = templeteNavigationController(image: UIImage(named: "search_unselected"), rootViewController: explore)
         
         let notifications = NotificationsController()
         let nav3 = templeteNavigationController(image: UIImage(named: "home_unselected"), rootViewController: notifications)
         
         
         let conversations = ConversationsController()
-        let nav4 = templeteNavigationController(image: UIImage(named: "home_unselected"), rootViewController: conversations)
+        let nav4 = templeteNavigationController(image: UIImage(named: "ic_mail_outline_white_2x-1"), rootViewController: conversations)
         
         
         

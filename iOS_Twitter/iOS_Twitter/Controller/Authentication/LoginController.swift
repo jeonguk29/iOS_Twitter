@@ -22,32 +22,35 @@ class LoginController: UIViewController {
     
     
     private lazy var emailContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .red
-        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        let iv = UIImageView()
-        iv.image = #imageLiteral(resourceName: "mail")
-        // 하위 뷰로 넣어주기
-        view.addSubview(iv)
-        iv.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 8, paddingBottom: 8)
-        iv.setDimensions(width: 24, height: 24)
-        
+        let image = #imageLiteral(resourceName: "ic_mail_outline_white_2x-1")
+        let view = Utilities().inputContaimerView(withImage: image)
+//        view.backgroundColor = .red
+//        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
+//
+//        let iv = UIImageView()
+//        iv.image = #imageLiteral(resourceName: "mail")
+//        // 하위 뷰로 넣어주기
+//        view.addSubview(iv)
+//        iv.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 8, paddingBottom: 8)
+//        iv.setDimensions(width: 24, height: 24)
+//
         return view
     }()
     
     private lazy var passwordContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemPurple
-        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        let iv = UIImageView()
-        iv.image = #imageLiteral(resourceName: "ic_lock_outline_white_2x")
-        // 하위 뷰로 넣어주기
-        view.addSubview(iv)
-        iv.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 8, paddingBottom: 8)
-        iv.setDimensions(width: 24, height: 24)
-        
+//        let view = UIView()
+        let image = #imageLiteral(resourceName: "ic_lock_outline_white_2x")
+        let view = Utilities().inputContaimerView(withImage: image)
+//        view.backgroundColor = .systemPurple
+//        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
+//
+//        let iv = UIImageView()
+//        iv.image = #imageLiteral(resourceName: "ic_lock_outline_white_2x")
+//        // 하위 뷰로 넣어주기
+//        view.addSubview(iv)
+//        iv.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 8, paddingBottom: 8)
+//        iv.setDimensions(width: 24, height: 24)
+//
         return view
     }()
     

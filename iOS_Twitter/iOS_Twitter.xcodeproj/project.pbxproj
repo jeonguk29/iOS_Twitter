@@ -21,6 +21,7 @@
 		645919522A5EA54100509B67 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645919512A5EA54100509B67 /* Extensions.swift */; };
 		645919552A5EE3F000509B67 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645919542A5EE3F000509B67 /* LoginController.swift */; };
 		645919572A5EE4CF00509B67 /* RegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645919562A5EE4CF00509B67 /* RegistrationController.swift */; };
+		645919592A5EF48D00509B67 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645919582A5EF48D00509B67 /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		645919512A5EA54100509B67 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		645919542A5EE3F000509B67 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		645919562A5EE4CF00509B67 /* RegistrationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationController.swift; sourceTree = "<group>"; };
+		645919582A5EF48D00509B67 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				645919512A5EA54100509B67 /* Extensions.swift */,
+				645919582A5EF48D00509B67 /* Utilities.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -224,6 +227,7 @@
 				645919502A5EA02400509B67 /* ConversationsController.swift in Sources */,
 				6459194A2A5E9FE600509B67 /* FeedController.swift in Sources */,
 				645919552A5EE3F000509B67 /* LoginController.swift in Sources */,
+				645919592A5EF48D00509B67 /* Utilities.swift in Sources */,
 				645919572A5EE4CF00509B67 /* RegistrationController.swift in Sources */,
 				645919482A5E9FBC00509B67 /* MainTabController.swift in Sources */,
 				6459194E2A5EA00F00509B67 /* NotificationsController.swift in Sources */,

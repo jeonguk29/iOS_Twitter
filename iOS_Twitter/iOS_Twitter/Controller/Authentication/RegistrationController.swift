@@ -11,6 +11,10 @@ class RegistrationController: UIViewController {
     
     // MARK: - Properties
     
+    private let imagePicker = UIImagePickerController()
+    
+    
+    
     private let PlusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "plus_photo"), for: .normal)
@@ -100,7 +104,7 @@ class RegistrationController: UIViewController {
     }
     
     @objc func handleAddProfilePhoto(){
-        print("Add Photo")
+        present(imagePicker, animated: true, completion: nil)
     }
     
     @objc func handelRegistration(){
@@ -112,6 +116,9 @@ class RegistrationController: UIViewController {
     
     func configureUI() {
         view.backgroundColor = .twitterBlue
+        
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
         
         view.addSubview(PlusPhotoButton)
         PlusPhotoButton.centerX(inView: view, topAnchor: view.safeAreaLayoutGuide.topAnchor)
@@ -135,6 +142,34 @@ class RegistrationController: UIViewController {
                             paddingRight: 40)
     }
     
+}
+
+
+// MARK: - UIImagePickerControllerDelegate
+extension RegistrationController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+    // 이 기능을 사용하면 선택한 미디어 항목이 사진이든 동영상이든 액세스할 수 있습니다.
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        // 이 정보는 당신이 어떤 유형을 선택했는지 알아야 하기 때문에 사전입니다.
+        // 원본이든 편집된 이미지든 영화든 영상이든 뭐든 그래서 우리는 이편집 이미지 키를 사용하여 해당 사전에서 값을 가져옵니다.
+        guard let profileImage = info[.editedImage] as? UIImage else {return}
+        
+        // 둥글게 설정
+        PlusPhotoButton.layer.cornerRadius = 128 / 2
+        PlusPhotoButton.layer.masksToBounds = true
+        
+        // 가로 세로 비율 맞추기 : 이미지가 포함된 프레임에 맞게 이미지의 크기를 조정합니다.
+        PlusPhotoButton.imageView?.contentMode = .scaleAspectFill
+        PlusPhotoButton.imageView?.clipsToBounds = true // 프레임 범위를 벗어나지 않도록 설정
+        
+        // 테두리 추가
+        PlusPhotoButton.layer.borderColor = UIColor.white.cgColor // 보더 색상 설정시 .cgColor를 붙여줘야함
+        PlusPhotoButton.layer.borderWidth = 3
+        
+        // 선택한 원본 이미지를 이미지 버튼에 삽입
+        self.PlusPhotoButton.setImage(profileImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        
+        dismiss(animated: true, completion: nil) // 해당 코드가 있어야 이미지 선택후 빠져나올수 있음
     
-    
+    }
 }

@@ -29,7 +29,21 @@ class Utilities {
         textField.anchor(left: iv.rightAnchor, bottom: view.bottomAnchor,
                          right: view.rightAnchor, paddingLeft: 8, paddingBottom: 8)
         
+        let dividerView = UIView()
+        dividerView.backgroundColor = .white
+        view.addSubview(dividerView)
+        dividerView.anchor(left: view.leftAnchor, bottom: view.bottomAnchor,
+                           right: view.rightAnchor, paddingLeft: 8 ,paddingRight: 8, height: 0.75)
+        
         return view
+    }
+    
+    func textField(withPlaceholder placeholder: String) -> UITextField {
+        let tf = UITextField()
+        tf.textColor = .white
+        tf.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        
+        return tf
     }
     
     

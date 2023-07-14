@@ -24,48 +24,24 @@ class LoginController: UIViewController {
     private lazy var emailContainerView: UIView = {
         let image = #imageLiteral(resourceName: "ic_mail_outline_white_2x-1")
         let view = Utilities().inputContaimerView(withImage: image, textField: emailTextField)
-//        view.backgroundColor = .red
-//        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
-//
-//        let iv = UIImageView()
-//        iv.image = #imageLiteral(resourceName: "mail")
-//        // 하위 뷰로 넣어주기
-//        view.addSubview(iv)
-//        iv.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 8, paddingBottom: 8)
-//        iv.setDimensions(width: 24, height: 24)
-//
         return view
     }()
     
     private lazy var passwordContainerView: UIView = {
-//        let view = UIView()
         let image = #imageLiteral(resourceName: "ic_lock_outline_white_2x")
         let view = Utilities().inputContaimerView(withImage: image, textField: passwordTextField)
-//        view.backgroundColor = .systemPurple
-//        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
-//
-//        let iv = UIImageView()
-//        iv.image = #imageLiteral(resourceName: "ic_lock_outline_white_2x")
-//        // 하위 뷰로 넣어주기
-//        view.addSubview(iv)
-//        iv.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 8, paddingBottom: 8)
-//        iv.setDimensions(width: 24, height: 24)
-//
         return view
     }()
     
     
     private let emailTextField: UITextField = {
-        let tf = UITextField()
-        tf.placeholder = "Email"
-        tf.textColor = .white
+        let tf = Utilities().textField(withPlaceholder: "Email")
         return tf
     }()
     
     private let passwordTextField: UITextField = {
-        let tf = UITextField()
-        tf.placeholder = "Password"
-        tf.textColor = .white
+        let tf = Utilities().textField(withPlaceholder: "Password")
+        tf.isSecureTextEntry = true
         return tf
     }()
     
@@ -103,7 +79,8 @@ class LoginController: UIViewController {
         // 오토레이 아웃의 기본은 높이,너비, 제약조건임
         view.addSubview(stack)
         // 너비를 따로 지정해주지 않아서 기본적으로 스택은 뷰가 가진 너비 왼쪽, 오른쪽 오토레이아웃 만큼 크기를 갖게 됨
-        stack.anchor(top: logoImageView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor)
+        stack.anchor(top: logoImageView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor,
+        paddingLeft: 16, paddingRight: 16)
     }
     
     

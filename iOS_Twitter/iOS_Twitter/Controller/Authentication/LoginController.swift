@@ -45,6 +45,24 @@ class LoginController: UIViewController {
         return tf
     }()
     
+    private let loginButton:UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Log In", for: .normal)
+        button.setTitleColor(.twitterBlue, for: .normal)
+        button.backgroundColor = .white
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        button.addTarget(self, action: #selector(handelLogin), for: .touchUpInside)
+        return button
+    }()
+    
+    
+    private let dontHaveAccountButton: UIButton = {
+        // 첫번째 Don't have an account는 일반 폰트로 Sign Up은 Bold하게 만들 것임
+        let button = Utilities().attributedButton("Don't have an account?", " Sign Up")
+        button.addTarget(self, action: #selector(handleShowsignUp), for: .touchUpInside)
+        return button
+    }()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -54,7 +72,13 @@ class LoginController: UIViewController {
     
     
     // MARK: - Selectors
+    @objc func handelLogin(){
+        print("HandelLogin")
+    }
     
+    @objc func handleShowsignUp(){
+        print("Show sing UP..")
+    }
     
     // MARK: - Helpers
     
@@ -71,16 +95,23 @@ class LoginController: UIViewController {
         // UIView 프로토콜에 추가된 확장 함수(extension function)로, 주어진 view의 너비와 높이를 변경합니다.
         
         // 스택뷰로 두게의 컨테이너를 묶어주기
-        let stack = UIStackView(arrangedSubviews: [emailContainerView, passwordContainerView])
+        let stack = UIStackView(arrangedSubviews: [emailContainerView, passwordContainerView, loginButton])
         stack.axis = .vertical // 세로축 정렬
-        stack.spacing = 8
+        stack.spacing = 20
+        stack.distribution = .fillEqually
         
         // 두개의 컨테이너의 각각의 50의 높이를 주었기 때문에 스택은 알아서 높이를 잡을 것임
         // 오토레이 아웃의 기본은 높이,너비, 제약조건임
         view.addSubview(stack)
         // 너비를 따로 지정해주지 않아서 기본적으로 스택은 뷰가 가진 너비 왼쪽, 오른쪽 오토레이아웃 만큼 크기를 갖게 됨
         stack.anchor(top: logoImageView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor,
-        paddingLeft: 16, paddingRight: 16)
+        paddingLeft: 32, paddingRight: 32)
+        
+        view.addSubview(dontHaveAccountButton)
+        dontHaveAccountButton.anchor(left:view.leftAnchor,
+                                     bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                                     right: view.rightAnchor, paddingLeft: 40,
+                                     paddingRight: 40)
     }
     
     

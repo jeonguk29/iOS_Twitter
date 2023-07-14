@@ -20,7 +20,6 @@ class LoginController: UIViewController {
         return iv
     }()
     
-    
     private lazy var emailContainerView: UIView = {
         let image = #imageLiteral(resourceName: "ic_mail_outline_white_2x-1")
         let view = Utilities().inputContaimerView(withImage: image, textField: emailTextField)
@@ -77,7 +76,8 @@ class LoginController: UIViewController {
     }
     
     @objc func handleShowsignUp(){
-        print("Show sing UP..")
+        let controller = RegistrationController()
+        navigationController?.pushViewController(controller, animated: true)
     }
     
     // MARK: - Helpers

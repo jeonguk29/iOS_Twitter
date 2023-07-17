@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class RegistrationController: UIViewController {
     
@@ -108,7 +109,20 @@ class RegistrationController: UIViewController {
     }
     
     @objc func handelRegistration(){
-        
+        guard let email = emailTextField.text else {return}
+        guard let password = passwordTextField.text else {return}
+       
+        // 파이어베이스의 사용자를 생성
+        Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+            // iOS에서 completion 매개변수는 비동기 작업이 완료된 후 실행될 코드 블럭을 지정하는 매개변수임
+            // 일반적으로 비동기 작업이 완료된 후 실행할 코드를 전달하기 위해 사용 ex API 호출
+            if let error = error {
+                print("DEBUG:  Error is \(error.localizedDescription)")
+                return
+            }
+            
+            print("성공적으로 사용자 등록")
+        }
     }
     
     

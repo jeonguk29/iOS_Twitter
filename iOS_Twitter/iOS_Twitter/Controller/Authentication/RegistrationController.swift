@@ -7,12 +7,15 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseCore
+import FirebaseDatabase
 
 class RegistrationController: UIViewController {
     
     // MARK: - Properties
     
     private let imagePicker = UIImagePickerController()
+    private var profileImage: UIImage?
     
     
     
@@ -109,9 +112,16 @@ class RegistrationController: UIViewController {
     }
     
     @objc func handelRegistration(){
+        guard let profileImage = profileImage else {
+            print("DEBUG: 프로필 이미지를 선택해주세요")
+            return
+        }
+        
         guard let email = emailTextField.text else {return}
         guard let password = passwordTextField.text else {return}
-       
+        guard let fullname = fullnameTextField.text else {return}
+        guard let username = usernameTextField.text else {return}
+        
         // 파이어베이스의 사용자를 생성
         Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
             // iOS에서 completion 매개변수는 비동기 작업이 완료된 후 실행될 코드 블럭을 지정하는 매개변수임
@@ -122,6 +132,23 @@ class RegistrationController: UIViewController {
             }
             
             print("성공적으로 사용자 등록")
+            
+            // 성공시 사용자에게 할당되는 고유의 uid를 가져옴, 데이터베이스에 저장할때 사용자 고유의 데이터를 관리하기 위함임
+            guard let uid = result?.user.uid else {return}
+            // 딕셔너리를 만듬
+            let values = ["email" : email, "username" : username, "fullname" : fullname]
+            
+            // 아래 명령 사용시 GoogleService-info.plist 파일에 데이터베이스 URL, API_KEY를 이용해 우리가 만든
+            // 파이어베이스 데이터베이스의 데이터를 읽고 씀
+            let ref =  Database.database().reference().child("users").child(uid)
+            // reference : 모든 데이터를 인터넷의 올바른 위치에 두는 문자열입니다.
+            // child("users").child(uid) 그런 다음 해당 점 하위 사용자로 이 사용자 구조를 만들었습니다.
+            // 우리가 만든 값으로 하위 값을 업데이트
+            ref.updateChildValues(values) { (error, ref) in
+                print("사용자 정보를 성공적으로 업데이트")
+                //이 완료 블록에서 API 호출이 완료되고 성공합니다.
+            }
+            
         }
     }
     
@@ -167,6 +194,7 @@ extension RegistrationController: UIImagePickerControllerDelegate, UINavigationC
         // 이 정보는 당신이 어떤 유형을 선택했는지 알아야 하기 때문에 사전입니다.
         // 원본이든 편집된 이미지든 영화든 영상이든 뭐든 그래서 우리는 이편집 이미지 키를 사용하여 해당 사전에서 값을 가져옵니다.
         guard let profileImage = info[.editedImage] as? UIImage else {return}
+        self.profileImage = profileImage
         
         // 둥글게 설정
         PlusPhotoButton.layer.cornerRadius = 128 / 2

@@ -24,6 +24,7 @@
 		645919572A5EE4CF00509B67 /* RegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645919562A5EE4CF00509B67 /* RegistrationController.swift */; };
 		645919592A5EF48D00509B67 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645919582A5EF48D00509B67 /* Utilities.swift */; };
 		6459195D2A61729700509B67 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6459195C2A61729700509B67 /* GoogleService-Info.plist */; };
+		6459195F2A65236A00509B67 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6459195E2A65236A00509B67 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		645919562A5EE4CF00509B67 /* RegistrationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationController.swift; sourceTree = "<group>"; };
 		645919582A5EF48D00509B67 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		6459195C2A61729700509B67 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		6459195E2A65236A00509B67 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A9DAA2526290D5CEFEE9FC7B /* Pods-iOS_Twitter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Twitter.debug.xcconfig"; path = "Target Support Files/Pods-iOS_Twitter/Pods-iOS_Twitter.debug.xcconfig"; sourceTree = "<group>"; };
 		ACE1FA9A71D76CAE3EFC5771 /* Pods-iOS_Twitter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Twitter.release.xcconfig"; path = "Target Support Files/Pods-iOS_Twitter/Pods-iOS_Twitter.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -114,6 +116,7 @@
 			children = (
 				645919512A5EA54100509B67 /* Extensions.swift */,
 				645919582A5EF48D00509B67 /* Utilities.swift */,
+				6459195E2A65236A00509B67 /* Constants.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -174,7 +177,6 @@
 				A9DAA2526290D5CEFEE9FC7B /* Pods-iOS_Twitter.debug.xcconfig */,
 				ACE1FA9A71D76CAE3EFC5771 /* Pods-iOS_Twitter.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -301,6 +303,7 @@
 				6459194A2A5E9FE600509B67 /* FeedController.swift in Sources */,
 				645919552A5EE3F000509B67 /* LoginController.swift in Sources */,
 				645919592A5EF48D00509B67 /* Utilities.swift in Sources */,
+				6459195F2A65236A00509B67 /* Constants.swift in Sources */,
 				645919572A5EE4CF00509B67 /* RegistrationController.swift in Sources */,
 				645919482A5E9FBC00509B67 /* MainTabController.swift in Sources */,
 				6459194E2A5EA00F00509B67 /* NotificationsController.swift in Sources */,

@@ -7,7 +7,7 @@ target 'iOS_Twitter' do
 
   # Pods for iOS_Twitter
   pod 'FirebaseAuth'
-  pod 'FirebaseFirestore'
+  pod 'FirebaseStorage'
   pod 'FirebaseDatabase'
   pod 'FirebaseCore'
 

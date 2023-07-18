@@ -124,7 +124,10 @@ class RegistrationController: UIViewController {
         
         let credentials = AuthCredentials(email: email, password: password, fullname: fullname, username: username, profileImage: profileImage)
         
-        AuthService.shared.registerUser(credentials: credentials)
+        AuthService.shared.registerUser(credentials: credentials){ (error, ref) in
+            print("사용자가 성공적으로 가입되었습니다.")
+            print("사용자의 인터페이스를 업데이트 할 부분입니다.")
+        }
         
     
     }

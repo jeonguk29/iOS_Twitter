@@ -21,7 +21,7 @@ struct AuthCredentials {
 struct AuthService {
     static let shared = AuthService()
     
-    func registerUser(credentials : AuthCredentials){
+    func registerUser(credentials : AuthCredentials, completion: @escaping(Error?, DatabaseReference) -> Void){
         let email = credentials.email
         let password = credentials.password
         let fullname = credentials.fullname
@@ -54,11 +54,7 @@ struct AuthService {
                                   "fullname" : fullname,
                                   "profileImageUrl" : profileImageUrl]
                     
-                    // 딕셔너리를 만듬
-                    REF_USERS.updateChildValues(values) { (error, ref) in
-                        print("사용자 정보를 성공적으로 업데이트")
-                        //이 완료 블록에서 API 호출이 완료되고 성공합니다.
-                    }
+                    REF_USERS.child(uid).updateChildValues(values, withCompletionBlock: completion)
                     
                 }
             }

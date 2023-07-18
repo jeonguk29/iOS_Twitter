@@ -9,7 +9,6 @@ import Foundation
 import FirebaseAuth
 import FirebaseCore
 import FirebaseDatabase
-
 struct AuthCredentials {
     let email: String
     let password: String
@@ -20,6 +19,11 @@ struct AuthCredentials {
 
 struct AuthService {
     static let shared = AuthService()
+    
+    func logUserIn(withEmail email: String, password: String, handler: @escaping (AuthDataResult?, Error?) -> Void){
+        //print("DEBUG: Email is \(email), password is \(password)")
+        Auth.auth().signIn(withEmail: email, password: password, completion: handler)
+    }
     
     func registerUser(credentials : AuthCredentials, completion: @escaping(Error?, DatabaseReference) -> Void){
         let email = credentials.email

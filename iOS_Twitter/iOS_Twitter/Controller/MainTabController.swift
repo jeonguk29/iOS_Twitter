@@ -28,7 +28,7 @@ class MainTabController: UITabBarController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-//        logUserOut()
+  //      logUserOut()
         view.backgroundColor = .twitterBlue // 앱 로드시 검정화면 파란색으로 맞춰주기 위함
         authenticateUserAndConfigureUI()
       
@@ -54,6 +54,7 @@ class MainTabController: UITabBarController {
     func logUserOut(){ // 로그인 확인을 하기 위한 임시 함수
         do {
             try Auth.auth().signOut()
+            print("DEBUG: 유저가 로그아웃 했습니다.")
         }catch let error {
             print("DEBUG: Failed to sign out with error \(error.localizedDescription)")
         }

@@ -36,6 +36,11 @@ class MainTabController: UITabBarController {
     
     
     // MARK: - API
+    func fetchUser(){
+        // 파이어베이스에서 사용자 데이터 가져오기
+        UserService.shared.fetchUser()
+    }
+    
     func authenticateUserAndConfigureUI() {
         if Auth.auth().currentUser == nil {
             //print("DEBUG: 사용자가 로그인 하지 않았습니다.")
@@ -48,6 +53,7 @@ class MainTabController: UITabBarController {
             //print("DEBUG: 사용자가 로그인 했습니다.")
             configureViewControllers() // 로그인 했으면 탭바 보여주기
             configureUI()
+            fetchUser()
         }
     }
     

@@ -122,46 +122,11 @@ class RegistrationController: UIViewController {
         guard let fullname = fullnameTextField.text else {return}
         guard let username = usernameTextField.text else {return}
         
-        // 사용자 이미지를 저장할때 파일이름을 우리가 생성하고 전달 해야함 
-        guard let imageData = profileImage.jpegData(compressionQuality: 0.3) else {return}
-        let filename = NSUUID().uuidString // 파일 이름 직접 생성하기 위함
-        let storageRef = STORAGE_PROFILE_IMAGE.child(filename)
-       
-        storageRef.putData(imageData) { (mata, error) in
-            // 다운로드 URL를 받아야함
-            storageRef.downloadURL { (url, error)in
-                guard let profileImageUrl = url?.absoluteString else {return}
-                
-                // 파이어베이스의 사용자를 생성
-                Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
-                    // iOS에서 completion 매개변수는 비동기 작업이 완료된 후 실행될 코드 블럭을 지정하는 매개변수임
-                    // 일반적으로 비동기 작업이 완료된 후 실행할 코드를 전달하기 위해 사용 ex API 호출
-                    if let error = error {
-                        print("DEBUG:  Error is \(error.localizedDescription)")
-                        return
-                    }
-                    
-                    print("성공적으로 사용자 등록")
-                    // 성공시 사용자에게 할당되는 고유의 uid를 가져옴, 데이터베이스에 저장할때 사용자 고유의 데이터를 관리하기 위함임
-                    guard let uid = result?.user.uid else {return}
-                    
-                    let values = ["email" : email,
-                                  "username" : username,
-                                  "fullname" : fullname,
-                                  "profileImageUrl" : profileImageUrl]
-                    
-                    // 딕셔너리를 만듬
-                    REF_USERS.updateChildValues(values) { (error, ref) in
-                        print("사용자 정보를 성공적으로 업데이트")
-                        //이 완료 블록에서 API 호출이 완료되고 성공합니다.
-                    }
-                    
-            }
-        }
+        let credentials = AuthCredentials(email: email, password: password, fullname: fullname, username: username, profileImage: profileImage)
         
-       
-            
-        }
+        AuthService.shared.registerUser(credentials: credentials)
+        
+    
     }
     
     

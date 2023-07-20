@@ -11,6 +11,7 @@ import SDWebImage
 class FeedController: UIViewController{
     // MARK: - Properties
     
+    
     // 아래 이미지를 보여주는 코드가 실행되기 전에 해당 유저 데이터가 없을 수도 있음
     // 따라서 기본적으로 프로필 이미지를 설정하기 전에 사용자가 설정되었는지 확인해야 합니다.
     var user: User? { // 변경이 일어나면 아래 사용자 이미지 화면에 출력

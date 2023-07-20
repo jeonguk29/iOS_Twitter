@@ -14,6 +14,25 @@ class MainTabController: UITabBarController {
 
     
     // MARK: - Properties
+    
+    // 사용자 설정시 즉 사용자를 불러오면 아래 블럭이 실행됨 : 사용자가 실제로 값을 가지고 있고 값이 설정되면 실행된다는것을 보장
+    var user: User? { // 변경이 일어나면 아래 메세지를 출력
+        didSet {
+            print("DEBUG: Did set user in main tab..")
+            guard let nav = viewControllers?[0] as? UINavigationController else {return}
+            guard let feed = nav.viewControllers.first as? FeedController else {return}
+            feed.user = user
+            
+            /* 아래서 뷰컨들을 설정해줬음
+             // UITabBarController 에서 제공하는 속성임 안에 배열 형태로 뷰를 넣어주면 됨
+             viewControllers = [nav1, nav2, nav3, nav4] 0,1,2,3
+             0번째 FeedController 위에 네비게이션 컨트롤러를 올렸었음
+             그 네비게이션의 첫번째 내장 컨틀로러가 FeedController임 
+             */
+            
+        }
+    }
+    
     let actionButton: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = .white
@@ -38,7 +57,9 @@ class MainTabController: UITabBarController {
     // MARK: - API
     func fetchUser(){
         // 파이어베이스에서 사용자 데이터 가져오기
-        UserService.shared.fetchUser()
+        UserService.shared.fetchUser { user in
+            self.user = user
+        }
     }
     
     func authenticateUserAndConfigureUI() {

@@ -28,6 +28,7 @@
 		645919612A665F8700509B67 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645919602A665F8700509B67 /* AuthService.swift */; };
 		645919632A66A8AE00509B67 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645919622A66A8AE00509B67 /* UserService.swift */; };
 		645919652A66B23900509B67 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645919642A66B23900509B67 /* User.swift */; };
+		645919672A69056100509B67 /* UploadTweetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645919662A69056100509B67 /* UploadTweetController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		645919602A665F8700509B67 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		645919622A66A8AE00509B67 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		645919642A66B23900509B67 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		645919662A69056100509B67 /* UploadTweetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadTweetController.swift; sourceTree = "<group>"; };
 		A9DAA2526290D5CEFEE9FC7B /* Pods-iOS_Twitter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Twitter.debug.xcconfig"; path = "Target Support Files/Pods-iOS_Twitter/Pods-iOS_Twitter.debug.xcconfig"; sourceTree = "<group>"; };
 		ACE1FA9A71D76CAE3EFC5771 /* Pods-iOS_Twitter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Twitter.release.xcconfig"; path = "Target Support Files/Pods-iOS_Twitter/Pods-iOS_Twitter.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -152,6 +154,7 @@
 				6459194B2A5E9FFD00509B67 /* ExploreController.swift */,
 				6459194D2A5EA00F00509B67 /* NotificationsController.swift */,
 				6459194F2A5EA02400509B67 /* ConversationsController.swift */,
+				645919662A69056100509B67 /* UploadTweetController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				645919522A5EA54100509B67 /* Extensions.swift in Sources */,
 				6459191C2A5E9DF900509B67 /* AppDelegate.swift in Sources */,
 				645919502A5EA02400509B67 /* ConversationsController.swift in Sources */,
+				645919672A69056100509B67 /* UploadTweetController.swift in Sources */,
 				645919652A66B23900509B67 /* User.swift in Sources */,
 				6459194A2A5E9FE600509B67 /* FeedController.swift in Sources */,
 				645919552A5EE3F000509B67 /* LoginController.swift in Sources */,

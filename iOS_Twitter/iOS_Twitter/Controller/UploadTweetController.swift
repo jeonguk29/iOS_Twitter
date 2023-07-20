@@ -39,6 +39,7 @@ class UploadTweetController: UIViewController {
         return iv
     }()
     
+    private let captionTextView = CaptionTextView() // 하위 클래스를 만들어 코드를 분리 시켰음 
     
     // MARK: - Lifecycle
     
@@ -77,8 +78,12 @@ class UploadTweetController: UIViewController {
         view.backgroundColor = .white
         configureNavigationBar()
         
-        view.addSubview(ProfileImageView)
-        ProfileImageView.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, paddingTop: 16, paddingLeft: 16)
+        let stack = UIStackView(arrangedSubviews: [ProfileImageView, captionTextView])
+        stack.axis = .horizontal
+        stack.spacing = 12
+        view.addSubview(stack)
+        stack.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 16)
+        // 스택안에 요소 넣고 오토레이아웃 정의시 내부 알아서 조절해줌
         
         // 이미 MainTabController에서 FeedController로 이미지 전달하기 위해 user에 값이 있다는 것을 보장하기 때문에
         // 이렇게 코드를 작성하면 앱의 성능을 훨씬 더 좋게 만들어줌 불필요한 API 호출이 필요 없어서

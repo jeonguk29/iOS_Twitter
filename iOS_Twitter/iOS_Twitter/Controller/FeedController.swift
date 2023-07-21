@@ -83,8 +83,8 @@ extension FeedController {
 
 extension FeedController: UICollectionViewDelegateFlowLayout {
     
-    // 각 셀의 크기를 지정 
+    // 각 셀의 크기를 지정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 200)
+        return CGSize(width: view.frame.width, height: 120)
     }
 }

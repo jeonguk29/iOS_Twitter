@@ -26,6 +26,15 @@ class FeedController: UIViewController{
         super.viewDidLoad()
         
         configureUI()
+        fetchTweets()
+    }
+    
+    
+    // MARK: - API
+    func fetchTweets(){
+        TweetService.shared.fatchTweets { tweets in
+            print("DEBUG: Tweets are \(tweets)")
+        }
     }
     
     // MARK: - Helpers
@@ -36,8 +45,6 @@ class FeedController: UIViewController{
         imageView.contentMode = .scaleAspectFit
         imageView.setDimensions(width: 44, height: 44)
         navigationItem.titleView = imageView
-        
-       
     }
     
     func configureLeftBarButton(){

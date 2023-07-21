@@ -117,7 +117,8 @@ class MainTabController: UITabBarController {
     
     
     func configureViewControllers() {
-        let feed = FeedController()
+        // UICollectionViewController을 상속 받게 수정했기 때문에 아래 프로퍼티를 추가해줘야함 
+        let feed = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
         // UINavigationController 가져와서 그안에 feed 를 붙여줌
         let nav1 = templeteNavigationController(image: UIImage(named: "home_unselected"), rootViewController: feed)
         

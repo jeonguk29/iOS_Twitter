@@ -8,7 +8,9 @@
 import UIKit
 import SDWebImage
 
-class FeedController: UIViewController{
+private let reuseIdentifier = "TweetCell"
+
+class FeedController: UICollectionViewController{
     // MARK: - Properties
     
     
@@ -41,6 +43,11 @@ class FeedController: UIViewController{
     
     func configureUI() {
         view.backgroundColor = .white
+        
+        //  재사용 셀에 재사용 식별자 등록
+        collectionView.register(TweetCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView.backgroundColor = .white
+        
         let imageView = UIImageView(image: UIImage(named: "twitter_logo_blue"))
         imageView.contentMode = .scaleAspectFit
         imageView.setDimensions(width: 44, height: 44)
@@ -60,4 +67,24 @@ class FeedController: UIViewController{
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: profileImageView)
     }
 
+}
+
+extension FeedController {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TweetCell
+        
+        return cell 
+    }
+}
+
+extension FeedController: UICollectionViewDelegateFlowLayout {
+    
+    // 각 셀의 크기를 지정 
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width, height: 200)
+    }
 }

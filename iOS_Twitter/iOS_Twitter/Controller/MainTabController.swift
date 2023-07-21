@@ -57,7 +57,8 @@ class MainTabController: UITabBarController {
     // MARK: - API
     func fetchUser(){
         // 파이어베이스에서 사용자 데이터 가져오기
-        UserService.shared.fetchUser { user in
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        UserService.shared.fetchUser(uid: uid) { user in
             self.user = user
         }
     }

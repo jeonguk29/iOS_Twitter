@@ -12,6 +12,11 @@ class TweetCell:UICollectionViewCell {
     
     // MARK: - Properties
     
+    // 데이터를 가져오기 전일수도 있기때문에 옵셔널로 선언
+    var tweet: Tweet? {
+        didSet { configure() }
+    }
+    
     private let profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
@@ -128,5 +133,15 @@ class TweetCell:UICollectionViewCell {
     
     
     // MARK: - Helpers
+    
+    func configure() {
+        // print("DEBUG: Did set tweet in cell..")
+        guard let tweet = tweet else {return}
+        captionLabel.text = tweet.caption
+        print("DEBUG: Tweet user is \(tweet.user.username)")// 해당 트윗을 남긴 사용자의 이름 출력
+        
+        profileImageView.sd_setImage(with: tweet.user.profileImageUrl)
+        infoLabel.text = tweet.user.username
+    }
     
 }

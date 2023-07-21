@@ -13,10 +13,11 @@ import FirebaseDatabase
 struct UserService {
     static let shared = UserService()
     
-    func fetchUser(completion: @escaping(User) -> Void) {
+    func fetchUser(uid: String, completion: @escaping(User) -> Void) {
         //print("DEBUG: 현재 사용자 정보를 가져온다.")
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-
+       // guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        //💁 전달받는 uid에 따른 사용자를 가져오게 수정함
         // 데이터베이스에서 이 정보를 한번만 가져오려고 함, 단일 이벤트를 관찰
         REF_USERS.child(uid).observeSingleEvent(of: .value) { snapshot in
            

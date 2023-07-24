@@ -95,10 +95,18 @@ extension FeedController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TweetCell
         
         print("DEBUGP: indexPath is \(indexPath.row)")
+        
+        cell.delegate = self
         cell.tweet = tweets[indexPath.row]
         
         return cell
     }
+    
+    // 셀하나 선택시 일어나는 작업을 설정하는 메서드
+//    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+//        navigationController?.pushViewController(controller, animated: true)
+//    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -108,4 +116,15 @@ extension FeedController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width, height: 120)
     }
+}
+
+
+
+// MARK: - TweetCellDelegate
+extension FeedController: TweetCellDelegate {
+    func handelProfileImageTapped() {
+        print("DEBUG: Handel profile image tapped in controller..")
+        let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+        navigationController?.pushViewController(controller, animated: true)
+    }// 해당 출력이 나온다면 트윗 셀에서 컨트롤러로 작업을 성공적으로 위임한것임
 }

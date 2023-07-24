@@ -7,6 +7,12 @@
 
 import UIKit
 
+
+// 프로토콜을 만들어서 현제 내 트윗셀을 내 컨트롤러로 전달할 것임
+protocol TweetCellDelegate: class {
+    func handelProfileImageTapped() // 컨트롤러에게 위임할 작업을 명시
+}
+
 class TweetCell:UICollectionViewCell {
     
     
@@ -17,13 +23,22 @@ class TweetCell:UICollectionViewCell {
         didSet { configure() }
     }
     
-    private let profileImageView: UIImageView = {
+    weak var delegate: TweetCellDelegate?
+    
+    private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.clipsToBounds = true
         iv.setDimensions(width: 48, height: 48)
         iv.layer.cornerRadius = 48/2
         iv.backgroundColor = .twitterBlue
+        
+        // 버튼이 아닌 view 객체를 탭 이벤트 처리하는 방법 : 사용자 프로필 작업하기
+        // lazy var로 profileImageView를 수정해야함 아래 함수가 만들어지기 전에 인스턴스를 찍을 수 있어서
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleProfileImageTapped))
+        iv.addGestureRecognizer(tap)
+        iv.isUserInteractionEnabled = true 
+        
         return iv
     }()
     
@@ -42,7 +57,7 @@ class TweetCell:UICollectionViewCell {
         button.setImage(UIImage(named: "comment"), for: .normal)
         button.tintColor = .darkGray
         button.setDimensions(width: 20, height: 20)
-        button.addTarget(self, action: #selector(handelCommentTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleCommentTapped), for: .touchUpInside)
         return button
     }()
     
@@ -51,7 +66,7 @@ class TweetCell:UICollectionViewCell {
         button.setImage(UIImage(named: "retweet"), for: .normal)
         button.tintColor = .darkGray
         button.setDimensions(width: 20, height: 20)
-        button.addTarget(self, action: #selector(handelRetweetTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleRetweetTapped), for: .touchUpInside)
         return button
     }()
     
@@ -60,7 +75,7 @@ class TweetCell:UICollectionViewCell {
         button.setImage(UIImage(named: "like"), for: .normal)
         button.tintColor = .darkGray
         button.setDimensions(width: 20, height: 20)
-        button.addTarget(self, action: #selector(handelLikeButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleLikeButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -69,7 +84,7 @@ class TweetCell:UICollectionViewCell {
         button.setImage(UIImage(named: "share"), for: .normal)
         button.tintColor = .darkGray
         button.setDimensions(width: 20, height: 20)
-        button.addTarget(self, action: #selector(handelShareTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleShareTapped), for: .touchUpInside)
         return button
     }()
     
@@ -115,21 +130,28 @@ class TweetCell:UICollectionViewCell {
     
     
     // MARK: - Selectors
-    @objc func handelCommentTapped(){
+    
+    @objc func handleProfileImageTapped(){
+        print("DEBUG: Profile Image Tapped in cell ..")
+        delegate?.handelProfileImageTapped()
+    }
+    
+    @objc func handleCommentTapped(){
         
     }
     
-    @objc func handelRetweetTapped(){
+    @objc func handleRetweetTapped(){
         
     }
     
-    @objc func handelLikeButtonTapped(){
+    @objc func handleLikeButtonTapped(){
         
     }
     
-    @objc func handelShareTapped(){
+    @objc func handleShareTapped(){
         
     }
+    
     
     
     // MARK: - Helpers

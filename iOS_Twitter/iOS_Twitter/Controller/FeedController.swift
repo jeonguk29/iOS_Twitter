@@ -97,7 +97,7 @@ extension FeedController {
         print("DEBUGP: indexPath is \(indexPath.row)")
         cell.tweet = tweets[indexPath.row]
         
-        return cell 
+        return cell
     }
 }
 

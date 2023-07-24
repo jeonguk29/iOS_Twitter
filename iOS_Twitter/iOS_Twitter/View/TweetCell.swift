@@ -137,11 +137,14 @@ class TweetCell:UICollectionViewCell {
     func configure() {
         // print("DEBUG: Did set tweet in cell..")
         guard let tweet = tweet else {return}
-        captionLabel.text = tweet.caption
-        print("DEBUG: Tweet user is \(tweet.user.username)")// 해당 트윗을 남긴 사용자의 이름 출력
+        let viewModel = TweetViewModel(tweet: tweet)
         
-        profileImageView.sd_setImage(with: tweet.user.profileImageUrl)
-        infoLabel.text = tweet.user.username
+        
+        captionLabel.text = tweet.caption
+        //print("DEBUG: Tweet user is \(tweet.user.username)")// 해당 트윗을 남긴 사용자의 이름 출력
+        
+        profileImageView.sd_setImage(with: viewModel.profileImageUrl)
+        infoLabel.attributedText = viewModel.userInfoText
     }
     
 }

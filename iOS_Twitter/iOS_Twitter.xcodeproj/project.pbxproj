@@ -111,11 +111,11 @@
 		6459191A2A5E9DF900509B67 /* iOS_Twitter */ = {
 			isa = PBXGroup;
 			children = (
-				645B5EC42A6E432200FDF3DA /* View */,
 				6459191B2A5E9DF900509B67 /* AppDelegate.swift */,
 				6459191D2A5E9DF900509B67 /* SceneDelegate.swift */,
-				645919462A5E9F2800509B67 /* Model */,
+				645B5EC42A6E432200FDF3DA /* View */,
 				645919432A5E9F2400509B67 /* ViewModel */,
+				645919462A5E9F2800509B67 /* Model */,
 				645919442A5E9F2500509B67 /* Controller */,
 				645919422A5E9F2100509B67 /* API */,
 				645919412A5E9F1E00509B67 /* Utils */,
@@ -154,8 +154,9 @@
 			children = (
 				645B5EC92A6E439400FDF3DA /* TweetViewModel.swift */,
 			);
-			path = ViewModel;
-			sourceTree = "<group>";
+			name = ViewModel;
+			path = iOS_Twitter/ViewModel;
+			sourceTree = SOURCE_ROOT;
 		};
 		645919442A5E9F2500509B67 /* Controller */ = {
 			isa = PBXGroup;

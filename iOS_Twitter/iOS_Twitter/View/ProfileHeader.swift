@@ -78,11 +78,19 @@ class ProfileHeader: UICollectionReusableView {
         return label
     }()
     
+    private let underlineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .twitterBlue
+        return view
+    }()
+    
     // MARK: - Lifecycle
     
     // 왜 뷰디드로드가 아니지?
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        filterBar.delegate = self
         
         addSubview(containerView)
         containerView.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor, height: 108)
@@ -118,6 +126,9 @@ class ProfileHeader: UICollectionReusableView {
         addSubview(filterBar)
         filterBar.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 50)
         
+        addSubview(underlineView)
+        // 3등분으로 나눠 각 필터 선택시 크기가 맞게 설정 
+        underlineView.anchor(left: leftAnchor, bottom: bottomAnchor, width: frame.width / 3, height: 2)
         
     }
     
@@ -135,4 +146,21 @@ class ProfileHeader: UICollectionReusableView {
         
     }
     
+}
+
+
+// MARK: - ProfileFilterViewDelegate
+
+extension ProfileHeader: ProfileFilterViewDelegate {
+    func filterView(_ view: ProfileFilterView, didSelect indexPath: IndexPath) {
+        guard let cell = view.collectionView.cellForItem(at: indexPath) as? ProfileFilterCell else {
+            return
+        } // 들어온 indexPath에 대한 cell을 얻음
+        
+        // 해당 셀의 x 위치를 가져온 다음 밑줄이 그어진 보기를 해당 x 위치로 애니메이션화하는 것입니다.
+        let xPosition = cell.frame.origin.x
+        UIView.animate(withDuration: 0.3) {
+            self.underlineView.frame.origin.x = xPosition
+        }
+    }
 }

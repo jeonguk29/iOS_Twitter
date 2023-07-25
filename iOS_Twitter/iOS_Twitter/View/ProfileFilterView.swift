@@ -10,11 +10,17 @@ import UIKit
 
 private let reuseIdentifier = "ProfileFilterCell"
 
+protocol ProfileFilterViewDelegate: class {
+    func filterView(_ view: ProfileFilterView, didSelect indexPath: IndexPath)
+}
+
 class ProfileFilterView: UIView {
 
 
     // MARK: - Properties
 
+    weak var delegate: ProfileFilterViewDelegate?
+    
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -61,6 +67,11 @@ extension ProfileFilterView: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 extension ProfileFilterView: UICollectionViewDelegate {
     
+    // 각 아이템을 선택할때마다 호출 되는 함수임
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate?.filterView(self, didSelect: indexPath) // 이제 우리는 이 프로토콜을 준수해야 하며 프로필 헤더 내부에서 그렇게 할 것임
+        
+    }
 }
 
 

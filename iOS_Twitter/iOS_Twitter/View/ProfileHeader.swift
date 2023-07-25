@@ -12,6 +12,10 @@ class ProfileHeader: UICollectionReusableView {
     
     // MARK: - properties
     
+    var user: User? {
+        didSet { configure()}
+    }
+    
     private let filterBar = ProfileFilterView() // 3개의 필터 셀을 가지고 있는
     
     private lazy var containerView: UIView = {
@@ -84,6 +88,30 @@ class ProfileHeader: UICollectionReusableView {
         return view
     }()
     
+    
+    private let followingLabel: UILabel = {
+        let label = UILabel()
+       // label.text = "0 Following"
+        
+        // 사용자의 팔로워를 볼 수 있도록 탭 제스처 인식기를 추가하고 있습니다.
+        let followTap = UITapGestureRecognizer(target: self, action: #selector(handleFollowersTapped))
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(followTap)
+        
+        return label
+    }()
+    
+    private let followersLabel: UILabel = {
+        let label = UILabel()
+     //   label.text = "2 Followers"
+        
+        let followTap = UITapGestureRecognizer(target: self, action: #selector(handleFollowingTapped))
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(followTap)
+        
+        return label
+    }()
+    
     // MARK: - Lifecycle
     
     // 왜 뷰디드로드가 아니지?
@@ -123,6 +151,14 @@ class ProfileHeader: UICollectionReusableView {
                                 right: rightAnchor, paddingTop: 8, paddingLeft: 12,
                                 paddingRight: 12)
         
+        let followStack = UIStackView(arrangedSubviews: [followingLabel, followersLabel])
+        followStack.axis = .horizontal // 수직
+        followStack.spacing = 8         // 간격
+        followStack.distribution = .fillEqually // 나눠서 가득 채우기
+        
+        addSubview(followStack)
+        followStack.anchor(top: userDetailsStack.bottomAnchor, left: leftAnchor, paddingTop: 8, paddingLeft: 12)
+        
         addSubview(filterBar)
         filterBar.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 50)
         
@@ -146,6 +182,32 @@ class ProfileHeader: UICollectionReusableView {
         
     }
     
+    @objc func handleFollowersTapped() {
+        
+    }
+    
+    @objc func handleFollowingTapped() {
+        
+    }
+    
+    
+    // MARK: - Helpers
+    
+    func configure() {
+        //여기에서 ViewModel을 구성할 것입니다.
+        //사용자를 전달해야 합니다.
+        
+        
+        guard let user = user else {return}
+        let viewModel = ProfileHeaderViewModel(user: user)
+        
+        profileImageView.sd_setImage(with: user.profileImageUrl)
+            
+        editProfileFollowButton.setTitle(viewModel.actionButtonTitle, for: .normal)
+        followingLabel.attributedText = viewModel.followingString
+        followersLabel.attributedText = viewModel.followersString
+    }
+
 }
 
 

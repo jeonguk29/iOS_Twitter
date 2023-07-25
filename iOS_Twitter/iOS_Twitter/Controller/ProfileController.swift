@@ -15,14 +15,26 @@ class ProfileController: UICollectionViewController {
     
     // MARK: - properties
     
+    private let user: User
     
     // MARK: - Lifecycle
     
+    init(user: User) {
+        self.user = user
+        super.init(collectionViewLayout: UICollectionViewFlowLayout())
+        //그리고 여기에서 Super.init를 호출할 때 이것은 컬렉션이기 때문에 이해하는 것이 매우 중요합니다.
+        //컬렉션 뷰 컨트롤러도 초기화해야 합니다.
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
         
+        print("DEBUG: User is \(user.username)")
         
     }
     
@@ -75,6 +87,8 @@ extension ProfileController {
 extension ProfileController {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as! ProfileHeader
+        
+        header.user = user
         
         return header
     }

@@ -6,6 +6,9 @@
 //
 
 import Foundation
+import FirebaseAuth
+import FirebaseCore
+import FirebaseDatabase
 
 struct User {
     let fullname: String
@@ -13,6 +16,9 @@ struct User {
     let username: String
     var profileImageUrl: URL?
     let uid: String
+    
+    // 사용자가 현재 사용자인지 여부를 파악하기 위한 변수
+    var isCurrentUser: Bool {return Auth.auth().currentUser?.uid == uid}
     
     init(uid: String, dictionary: [String: AnyObject]){
         self.uid = uid

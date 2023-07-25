@@ -10,7 +10,7 @@ import UIKit
 
 // 프로토콜을 만들어서 현제 내 트윗셀을 내 컨트롤러로 전달할 것임
 protocol TweetCellDelegate: class {
-    func handelProfileImageTapped() // 컨트롤러에게 위임할 작업을 명시
+    func handelProfileImageTapped(_ cell: TweetCell) // 컨트롤러에게 위임할 작업을 명시
 }
 
 class TweetCell:UICollectionViewCell {
@@ -133,7 +133,7 @@ class TweetCell:UICollectionViewCell {
     
     @objc func handleProfileImageTapped(){
         print("DEBUG: Profile Image Tapped in cell ..")
-        delegate?.handelProfileImageTapped()
+        delegate?.handelProfileImageTapped(self)
     }
     
     @objc func handleCommentTapped(){

@@ -122,9 +122,11 @@ extension FeedController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - TweetCellDelegate
 extension FeedController: TweetCellDelegate {
-    func handelProfileImageTapped() {
-        print("DEBUG: Handel profile image tapped in controller..")
-        let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+    func handelProfileImageTapped(_ cell: TweetCell) {
+        guard let user = cell.tweet?.user else { return }
+        let controller = ProfileController(user: user)
         navigationController?.pushViewController(controller, animated: true)
     }// 해당 출력이 나온다면 트윗 셀에서 컨트롤러로 작업을 성공적으로 위임한것임
+    
+
 }

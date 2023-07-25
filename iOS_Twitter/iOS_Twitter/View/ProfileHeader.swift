@@ -12,7 +12,7 @@ class ProfileHeader: UICollectionReusableView {
     
     // MARK: - properties
     
-    private let filterBar = ProfileFilterView()
+    private let filterBar = ProfileFilterView() // 3개의 필터 셀을 가지고 있는
     
     private lazy var containerView: UIView = {
         let view = UIView()

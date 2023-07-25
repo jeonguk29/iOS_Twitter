@@ -37,6 +37,9 @@ class ProfileFilterView: UIView {
         
         collectionView.register(ProfileFilterCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
+        let selectedIndexPath = IndexPath(row: 0, section: 0)
+        collectionView.selectItem(at: selectedIndexPath, animated: true, scrollPosition: .left)
+        
         addSubview(collectionView)
         collectionView.addConstraintsToFillView(self)
     }
@@ -53,11 +56,15 @@ class ProfileFilterView: UIView {
 
 extension ProfileFilterView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return ProfileFilterOptions.allCases.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ProfileFilterCell
+        
+        let option = ProfileFilterOptions(rawValue: indexPath.row)
+        //print("DEBUG: Option is \(option?.description)")
+        cell.option = option
         
         return cell
     }
@@ -82,8 +89,10 @@ extension ProfileFilterView: UICollectionViewDelegateFlowLayout {
     // 각각의 셀 크기 지정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
+        let count = CGFloat(ProfileFilterOptions.allCases.count)
+        
         //frame의 너비를 3등분한 너비
-        return CGSize(width: frame.width / 3, height: frame.height)
+        return CGSize(width: frame.width / count, height: frame.height)
     }
     
     // 섹션과 섹션사이의 간격

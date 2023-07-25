@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol ProfileHeaderDelegate: class {
+    func handleDismissal()
+}
+
 // 컬렉션뷰의 재사용 가능한 뷰로 만듬
 class ProfileHeader: UICollectionReusableView {
     
@@ -15,6 +19,8 @@ class ProfileHeader: UICollectionReusableView {
     var user: User? {
         didSet { configure()}
     }
+    
+    weak var delegate: ProfileHeaderDelegate?
     
     private let filterBar = ProfileFilterView() // 3개의 필터 셀을 가지고 있는
     
@@ -175,7 +181,9 @@ class ProfileHeader: UICollectionReusableView {
     
     // MARK: - Selectors
     @objc func handleDismissal() {
-        
+        // 여기는 헤더이며 UICollectionReusableView를 상속 받은 곳임 컨트롤러와 다르게 dismiss 나오지 않음
+        // 그래서 커스텀 델리게이트를 만들어 헤당 컨트롤러에게 작업을 위임하는 프로토콜을 만들것임
+        delegate?.handleDismissal()
     }
     
     @objc func handleEditProfileFollow() {

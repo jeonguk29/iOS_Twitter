@@ -26,6 +26,8 @@ enum ProfileFilterOptions: Int, CaseIterable {
 struct ProfileHeaderViewModel {
     private let user: User
     
+     let usernameText : String
+    
     var followersString: NSAttributedString? {
         return attributedText(withValue: 0, text: "followers")
     }
@@ -48,6 +50,7 @@ struct ProfileHeaderViewModel {
     
     init(user: User) {
         self.user = user
+        self.usernameText = "@" + user.username
     }
     
     // fileprivate 비공계로 설정, 도움이 함수일 뿐임

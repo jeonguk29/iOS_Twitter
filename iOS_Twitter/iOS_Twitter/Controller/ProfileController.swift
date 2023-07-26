@@ -17,6 +17,11 @@ class ProfileController: UICollectionViewController {
     
     private let user: User
     
+    private var tweets = [Tweet]() {
+        didSet {collectionView.reloadData()}
+    }
+    
+    
     // MARK: - Lifecycle
     
     init(user: User) {
@@ -34,6 +39,7 @@ class ProfileController: UICollectionViewController {
         super.viewDidLoad()
         configureCollectionView()
         
+        fetchTweets()
         print("DEBUG: User is \(user.username)")
         
     }
@@ -42,6 +48,16 @@ class ProfileController: UICollectionViewController {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.barStyle = .black
         navigationController?.navigationBar.isHidden = true //네비게이션 바 숨기고 커스텀으로 만들기 위해
+    }
+    
+    
+    // MARK: - API
+    
+    func fetchTweets() {
+        // FeedController에서 선택한 트윗셀의 user 정보를 전달 받기 때문에 바로 넘길 수 있음
+        TweetService.shared.fatchTweets(forUser: user) { tweets in
+            self.tweets = tweets
+        }
     }
     
     
@@ -70,12 +86,13 @@ class ProfileController: UICollectionViewController {
 extension ProfileController {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return tweets.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TweetCell
         
+        cell.tweet = tweets[indexPath.row]
         return cell
     }
 }

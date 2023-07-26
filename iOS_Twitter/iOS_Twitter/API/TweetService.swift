@@ -56,5 +56,26 @@ struct TweetService {
         }
     }
     
+    // 사용자가 작성한 모든 트윗에 대한 변경 내역을 실시간으로 검색하는 데 사용됩니다.
+    func fatchTweets(forUser user: User, completion: @escaping([Tweet]) -> Void){
+        var tweets = [Tweet]()
+        
+        REF_USER_TWEETS.child(user.uid).observe(.childAdded) { snapshot in
+            let tweetID = snapshot.key
+            print(snapshot.key)
+            REF_TWEETS.child(tweetID).observeSingleEvent(of: .value) { snapshot in
+                guard let dictionary = snapshot.value as? [String: Any] else {return}
+                guard let uid = dictionary["uid"] as? String else {return}
+                
+                UserService.shared.fetchUser(uid: uid) { user in
+                    let tweet = Tweet(user: user, tweetID: tweetID, dictionary: dictionary)
+                    tweets.append(tweet)// 모든 트윗을 찾아 담고 반환
+                    completion(tweets)
+                }
+            }
+            
+            // 프로필 이미지를 눌렀을때 user.uid에 해당하는것을 파이어베이스의가서 실제 값들을 건져오면 됨
+        }
+    }
     
 }

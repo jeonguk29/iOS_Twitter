@@ -101,7 +101,7 @@ extension FeedController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TweetCell
         
-        print("DEBUGP: indexPath is \(indexPath.row)")
+        //print("DEBUGP: indexPath is \(indexPath.row)")
         
         cell.delegate = self
         cell.tweet = tweets[indexPath.row]

@@ -29,13 +29,13 @@ class FeedController: UICollectionViewController{
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
         fetchTweets()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.barStyle = .default
         navigationController?.navigationBar.isHidden = false
         // ProfileHeader 에서 뒤로가기할때 navigationController 데리자가 수행하는데 그때
         // 프로필보기 쪽에서 헤더를 보이지 않게 만들어서 돌아올때 설정 값이 남아있을수 있음 그래서 해당 속성을 추가

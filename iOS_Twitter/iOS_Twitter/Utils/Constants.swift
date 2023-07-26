@@ -16,4 +16,5 @@ let STORAGE_REF = Storage.storage().reference() // 사용자 프로필 이미지
 let STORAGE_PROFILE_IMAGE = STORAGE_REF.child("profile_images")
 
 let REF_TWEETS = DB_REF.child("tweets")
+let REF_USER_TWEETS = DB_REF.child("user-tweets")
 

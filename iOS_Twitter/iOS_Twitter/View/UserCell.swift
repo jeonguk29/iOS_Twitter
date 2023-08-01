@@ -12,6 +12,10 @@ class UserCell: UITableViewCell {
     
     // MARK: - Properties
     
+    var user: User? { // 실제 사용자 정보를 채우기 위한 변수
+        didSet { configure() } // 사용자 정보를 받으면 해당 함수 호출하여 UI 뷰에 사용자 정보를 대입
+    }
+    
     private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
@@ -57,4 +61,17 @@ class UserCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+    // MARK: - Helpers
+    
+    func configure() {
+        guard let user = user else {return}
+        
+        profileImageView.sd_setImage(with: user.profileImageUrl)
+        usernameLabel.text = user.username
+        fullnameLabel.text = user.fullname
+    }
+    
+    
 }

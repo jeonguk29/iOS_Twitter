@@ -15,7 +15,7 @@ class ProfileController: UICollectionViewController {
     
     // MARK: - properties
     
-    private let user: User
+    private var user: User
     
     private var tweets = [Tweet]() {
         didSet {collectionView.reloadData()}
@@ -135,10 +135,29 @@ extension ProfileController: ProfileHeaderDelegate {
     
     // 커스텀 델리게이트로 팔로우 처리해주기 
     func handleEditProfileFollow(_ header: ProfileHeader) {
-        UserService.shared.followUser(uid: user.uid) { (ref, err) in
-            
+
+        print("DEBUG: User is followed is \(user.isFollowed) before button tap ")
+        
+        if user.isFollowed {
+            UserService.shared.unfollowUser(uid: user.uid) { (err, ref) in
+                //print("언팔로우 처리가 끝난후 돌아오는 곳 ")
+                self.user.isFollowed = false
+                print("DEBUG: User is followed is \(self.user.isFollowed) after button tap ")
+            }
+        } else {
+            // 처음에 눌렀을때는 팔로우 하지 않은 false 상황이니까  여기가 눌릴것임
+            UserService.shared.followUser(uid: user.uid) { (ref, err) in
+                //print("팔로우 처리가 끝난후 돌아오는 곳 ")
+                self.user.isFollowed = true
+                print("DEBUG: User is followed is \(self.user.isFollowed) after button tap ")
+            }
         }
+        
+       
+        
+       
     }
+ 
     
     func handleDismissal() {
         navigationController?.popViewController(animated: true)

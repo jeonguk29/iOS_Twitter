@@ -10,6 +10,8 @@ import FirebaseAuth
 import FirebaseCore
 import FirebaseDatabase
 
+typealias DatabaseCompletion = ((Error? , DatabaseReference) -> Void)
+
 struct UserService {
     static let shared = UserService()
     
@@ -62,7 +64,7 @@ struct UserService {
         }
     }
     
-    func followUser(uid: String, completion: @escaping(Error?, DatabaseReference) -> Void){
+    func followUser(uid: String, completion: @escaping(DatabaseCompletion)){
         // 사용자 A가 B를 팔로우 하면 B사용자 밑에 A, C ... 등등을 연결하고
         // 사용자 A가 누구를 팔로우 하는지 A밑에 B를 추가 해서 각각 관리하는 구조임
         
@@ -75,5 +77,15 @@ struct UserService {
         
         print("DEBUG: Current uid \(currentUid) started following \(uid)")
         print("DEBUG: Uid \(uid) gained \(currentUid) as a follower")
+    }
+    
+    func unfollowUser(uid: String, completion: @escaping(DatabaseCompletion)){
+        guard let currentUid = Auth.auth().currentUser?.uid else {return}
+        
+        REF_USER_FOLLOWING.child(currentUid).child(uid).removeValue() { (err, ref) in
+            // 팔로잉을 먼저 제거하고 팔로우를 제거하기 
+            REF_USER_FOLLOWERS.child(uid).child(currentUid).removeValue(completionBlock: completion)
+        }
+    
     }
 }

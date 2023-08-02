@@ -9,6 +9,7 @@ import UIKit
 
 protocol ProfileHeaderDelegate: class {
     func handleDismissal()
+    func handleEditProfileFollow(_ header: ProfileHeader) // 팔로우를 처리할 프로토콜 메서드 만들기
 }
 
 // 컬렉션뷰의 재사용 가능한 뷰로 만듬
@@ -185,7 +186,7 @@ class ProfileHeader: UICollectionReusableView {
     }
     
     @objc func handleEditProfileFollow() {
-        
+        delegate?.handleEditProfileFollow(self)
     }
     
     @objc func handleFollowersTapped() {

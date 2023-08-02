@@ -132,6 +132,14 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - ProfileHeaderDelegate
 extension ProfileController: ProfileHeaderDelegate {
+    
+    // 커스텀 델리게이트로 팔로우 처리해주기 
+    func handleEditProfileFollow(_ header: ProfileHeader) {
+        UserService.shared.followUser(uid: user.uid) { (ref, err) in
+            
+        }
+    }
+    
     func handleDismissal() {
         navigationController?.popViewController(animated: true)
     }

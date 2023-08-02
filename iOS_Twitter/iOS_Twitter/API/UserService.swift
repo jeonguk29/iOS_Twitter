@@ -61,4 +61,19 @@ struct UserService {
             completion(users)
         }
     }
+    
+    func followUser(uid: String, completion: @escaping(Error?, DatabaseReference) -> Void){
+        // 사용자 A가 B를 팔로우 하면 B사용자 밑에 A, C ... 등등을 연결하고
+        // 사용자 A가 누구를 팔로우 하는지 A밑에 B를 추가 해서 각각 관리하는 구조임
+        
+        guard let currentUid = Auth.auth().currentUser?.uid else {return}
+    
+        REF_USER_FOLLOWING.child(currentUid).updateChildValues([uid: 1]) { (err, ref) in
+            REF_USER_FOLLOWERS.child(uid).updateChildValues([currentUid: 1], withCompletionBlock: completion)
+        }
+    
+        
+        print("DEBUG: Current uid \(currentUid) started following \(uid)")
+        print("DEBUG: Uid \(uid) gained \(currentUid) as a follower")
+    }
 }

@@ -43,9 +43,18 @@ struct ProfileHeaderViewModel {
         
         if user.isCurrentUser {
             return "Edit Profile"
-        }else {
+        }
+        
+        if !user.isFollowed && !user.isCurrentUser {
+            // 따라서 사용자가 팔로우되지 않고 사용자가 현재 사용자가 아닌 경우 돌아가서 팔로우할 것입니다.
             return "Follow"
         }
+        
+        if user.isFollowed {
+            return "Following"
+        }
+        
+        return "Loading"
     }
     
     init(user: User) {

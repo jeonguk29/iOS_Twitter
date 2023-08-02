@@ -41,6 +41,7 @@ class ProfileController: UICollectionViewController {
         
         fetchTweets()
         print("DEBUG: User is \(user.username)")
+        checkIfUserIsFollowed()
         
     }
     
@@ -60,6 +61,12 @@ class ProfileController: UICollectionViewController {
         }
     }
     
+    func checkIfUserIsFollowed(){
+        UserService.shared.checkIfUserIsFollowd(uid: user.uid) { isFollowed in
+            self.user.isFollowed = isFollowed
+            self.collectionView.reloadData()
+        }
+    }
     
     
     // MARK: - Helpers
@@ -143,6 +150,10 @@ extension ProfileController: ProfileHeaderDelegate {
                 //print("언팔로우 처리가 끝난후 돌아오는 곳 ")
                 self.user.isFollowed = false
                 print("DEBUG: User is followed is \(self.user.isFollowed) after button tap ")
+                
+                // UI 변경 팔로우에 따른 : API 호출 후에만 변경 됨
+               // header.editProfileFollowButton.setTitle("Follow", for: .normal)
+                self.collectionView.reloadData()
             }
         } else {
             // 처음에 눌렀을때는 팔로우 하지 않은 false 상황이니까  여기가 눌릴것임
@@ -150,8 +161,14 @@ extension ProfileController: ProfileHeaderDelegate {
                 //print("팔로우 처리가 끝난후 돌아오는 곳 ")
                 self.user.isFollowed = true
                 print("DEBUG: User is followed is \(self.user.isFollowed) after button tap ")
+                
+                // UI 변경 팔로우에 따른
+                //header.editProfileFollowButton.setTitle("Following", for: .normal)
+                self.collectionView.reloadData()
             }
         }
+        
+        
         
        
         

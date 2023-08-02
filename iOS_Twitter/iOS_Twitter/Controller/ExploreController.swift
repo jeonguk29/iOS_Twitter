@@ -16,12 +16,35 @@ class ExploreController: UITableViewController{
         didSet{ tableView.reloadData() }
     }
     
+    private var fileteredUsers = [User]() {// 사용자가 서치바에 검색하면 필터링된 유저들을 담을 배열임
+        didSet { tableView.reloadData() }
+    } // 검색 기반으로 이 배열을 채워야함
+    
+    private var inSearchMode: Bool { // 검색모드인지 여부를 판단
+        return searchController.isActive &&
+            !searchController.searchBar.text!.isEmpty
+        // 검색컨트롤러가 활성화 되어있고 텍스트가 비어있지 않은경우 => 검색 모드
+    }
+    
+    
+    private let searchController = UISearchController(searchResultsController: nil)
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         fetchUsers()
+        configureSearchController()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.navigationBar.isHidden = false
+        // ProfileHeader 에서 뒤로가기할때 navigationController 데리자가 수행하는데 그때
+        // 프로필보기 쪽에서 헤더를 보이지 않게 만들어서 돌아올때 설정 값이 남아있을수 있음 그래서 해당 속성을 추가
+    }
+    
     
     
     // MARK: - API
@@ -46,19 +69,33 @@ class ExploreController: UITableViewController{
         tableView.rowHeight = 60
         tableView.separatorStyle = .none // 셀 사이에 구분선이 보이지 않게 설정
     }
-
+    
+    func configureSearchController(){
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.placeholder = "Search for a user"
+        navigationItem.searchController = searchController
+        definesPresentationContext = false
+    }
 }
+
+
+// MARK: - UITableViewDelegate/DataSource
 
 extension ExploreController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return users.count
+        return inSearchMode ? fileteredUsers.count : users.count
+        // 검색모드면 필터링된 사용자의 계수에 따라 셀을 보여줌 , 그게 아니면 전체 사용자들을 보여줘
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as!
         UserCell
         
-        cell.user = users[indexPath.row]
+        let user = inSearchMode ? fileteredUsers[indexPath.row] : users[indexPath.row]
+        //검색모드이면 검색모드배열에 담은 유저를 한명씩 셀에 전달, 그게 아니면 전체 사용자들을 한명씩 셀에 전달
+        cell.user = user
         return cell
         
         /*
@@ -70,4 +107,37 @@ extension ExploreController {
             4.이전에 API 부분에서 fetchUsers를 구현해 users 배열에 사용자들을 담고 있는 상태여야함
          */
     }
+    
+    // 사용자 선택시 프로필 보이게 하기
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let user = inSearchMode ? fileteredUsers[indexPath.row] : users[indexPath.row]
+        // 선택할때도 모드에 따라서 선택되게 해야함 안그럼 검색모드에서 나오는 사용자를 선택했을때 검색모드가 아닌 전체 사용자의 첫번째 셀이 선택됨
+        let controller = ProfileController(user: user)
+        navigationController?.pushViewController(controller, animated: true)
+    }
+}
+
+
+
+
+// MARK: - UISearchResultsUpdating
+
+extension ExploreController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text?.lowercased() else {return}
+        //print("DEBUG: Search text is \(searchText)")
+        
+        fileteredUsers = users.filter({ $0.username.contains(searchText) })
+        // 사용자 이름 검색 필터링
+        
+        // 위 문법을 풀어 쓰면
+//        fileteredUsers = users.filter({user -> Bool in
+//            return user.username.contains()
+//        })
+        
+    }// 사용자가 검색하는 것에 대하여 검색컨트롤러를 업데이트
+    // 무언가를 검색창에 입력하거나 삭제할때마다 호출됨 한글자 한글자
+    
+    
 }

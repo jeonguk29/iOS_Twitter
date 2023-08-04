@@ -110,10 +110,13 @@ extension FeedController {
     }
     
     // 셀하나 선택시 일어나는 작업을 설정하는 메서드
-//    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout())
-//        navigationController?.pushViewController(controller, animated: true)
-//    }
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let controller = TweetController(tweet: tweets[indexPath.row])
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    
+    
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout

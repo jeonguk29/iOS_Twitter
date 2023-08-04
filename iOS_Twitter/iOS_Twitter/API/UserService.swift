@@ -103,4 +103,22 @@ struct UserService {
     /*
      위의 함수는 Firebase Realtime Database에서 현재 사용자가 선택한 사용자의 프로필을 팔로우했는지 확인하는 함수입니다. 함수는 먼저 Auth.auth().currentUser?.uid를 사용하여 현재 로그인 된 사용자의 uid를 가져옵니다. 가져오지 못하면 함수를 종료하고, 현재 사용자의 uid가 있는 경우 REF_USER_FOLLOWING.child(currentUid).child(uid) 경로에 대한 'single event'를 관찰합니다. 'degree event'를 관찰하면 콜백 함수 completion으로 전달된 Bool 값에 따라 팔로우 여부가 반환됩니다. 만약 snapshot이 존재한다면 (즉, 사용자가 팔로우 중이면) ture, 아니면 false입니다.
      */
+    
+    // 사용자 팔로우, 팔로잉 실제 값으로 출력하게
+    func fetchUserStats(uid:String, completion: @escaping(UserRelationStats) -> Void) {
+        REF_USER_FOLLOWERS.child(uid).observeSingleEvent(of: .value) { snapshot  in
+            let followers = snapshot.children.allObjects.count
+            
+            print("DEBUG: Followers count is \(followers)")
+            
+            REF_USER_FOLLOWING.child(uid).observeSingleEvent(of: .value) { snapshot   in
+                let following = snapshot.children.allObjects.count
+                print("DEBUG: Following \(following) people")
+                
+                let stats = UserRelationStats(followers: followers, following: following)
+                completion(stats)
+
+            }
+        }
+    }
 }

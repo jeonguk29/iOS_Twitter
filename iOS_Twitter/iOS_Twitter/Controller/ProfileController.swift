@@ -42,6 +42,7 @@ class ProfileController: UICollectionViewController {
         fetchTweets()
         print("DEBUG: User is \(user.username)")
         checkIfUserIsFollowed()
+        fetchUserStats()
         
     }
     
@@ -68,6 +69,15 @@ class ProfileController: UICollectionViewController {
         }
     }
     
+    
+    func fetchUserStats() {
+        UserService.shared.fetchUserStats(uid: user.uid) { stats in
+            //print("DEBUG: User has \(stats.followers) followers")
+            //print("DEBUG: User is following \(stats.following) people")
+            self.user.stats = stats
+            self.collectionView.reloadData()
+        }
+    }
     
     // MARK: - Helpers
     
@@ -143,7 +153,13 @@ extension ProfileController: ProfileHeaderDelegate {
     // 커스텀 델리게이트로 팔로우 처리해주기 
     func handleEditProfileFollow(_ header: ProfileHeader) {
 
-        print("DEBUG: User is followed is \(user.isFollowed) before button tap ")
+        //print("DEBUG: User is followed is \(user.isFollowed) before button tap ")
+        
+        if user.isCurrentUser { // 현제 사용자 자기 자신 프로필 클릭시 아무일도 일어나지 않게 그냥 return
+            // 팔로우 못하게 
+            print("DEBUG : Show edit profile controller..")
+            return
+        }
         
         if user.isFollowed {
             UserService.shared.unfollowUser(uid: user.uid) { (err, ref) in
@@ -167,12 +183,7 @@ extension ProfileController: ProfileHeaderDelegate {
                 self.collectionView.reloadData()
             }
         }
-        
-        
-        
-       
-        
-       
+
     }
  
     

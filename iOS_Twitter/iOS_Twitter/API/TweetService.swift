@@ -13,13 +13,27 @@ import FirebaseDatabase
 struct TweetService {
     static let shared = TweetService()
     
-    func uploadTweet(caption: String, completion: @escaping(Error?, DatabaseReference) -> Void){
+    func uploadTweet(caption: String, type: UploadTweetConfiguration, completion: @escaping(Error?, DatabaseReference) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         // 누가 트윗을 남겼는지 uid를 저장해줘야함
         
         let values = ["uid": uid, "timestamp" : Int(NSDate().timeIntervalSince1970),
                       "likes" : 0, "retweets": 0, "caption": caption] as [String : Any]
         
+        // 파이어 베이스에 답장 업로드하기
+        switch type {
+        case .tweet:
+            REF_TWEETS.childByAutoId().updateChildValues(values) { (error, ref) in
+                // update user-tweet structure after tweet upload completes
+                guard let tweetID = ref.key else { return }
+                REF_USER_TWEETS.child(uid).updateChildValues([tweetID: 1], withCompletionBlock: completion)
+            }
+        case .reply(let tweet):
+            // 답글일때는 기준 트윗 아이디 밑에 답글 트윗 을 생성
+            REF_TWEET_REPLIES.child(tweet.tweetID).childByAutoId()
+                .updateChildValues(values, withCompletionBlock: completion)
+        }
+                                    
         let ref =  REF_TWEETS.childByAutoId()
         
         // 트윗이 생성 될때 만들어지는 자동 ID 안에 : 여기에 사용자가 작성한 모든 값을 자식으로 업데이트

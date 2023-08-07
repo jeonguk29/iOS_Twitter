@@ -84,7 +84,9 @@ class UploadTweetController: UIViewController {
     @objc func handleUploadTweet() {
         //print("업로드 트윗")
         guard let caption = captionTextView.text else {return}
-        TweetService.shared.uploadTweet(caption: caption) { (error, ref)in
+        
+        // 이미 config를 컨트롤러 만들때 초기화 하기 때문에 전달 할 수 있음
+        TweetService.shared.uploadTweet(caption: caption, type: config) { (error, ref)in
             if let error = error {
                 print("DEBUG: 트윗 업로드에 실패했습니다. error\(error.localizedDescription)")
                 return

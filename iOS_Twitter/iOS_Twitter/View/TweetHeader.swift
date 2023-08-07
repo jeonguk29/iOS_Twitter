@@ -11,6 +11,12 @@ class TweetHeader: UICollectionReusableView {
     
     
     // MARK: - Properties
+    
+    // 실제 데이터를 담기 위한 트윗 변수
+    var tweet: Tweet? {
+          didSet { configure() }
+      }
+    
     private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
@@ -71,19 +77,9 @@ class TweetHeader: UICollectionReusableView {
     }()
     
     // MARK: - 리트윗, 좋아요 하위 뷰 만들기
-    private lazy var retweetsLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.text = "0 retweets"
-        return label
-    }()
+    private lazy var retweetsLabel =  UILabel()
     
-    private lazy var likesLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.text = "0 likes"
-        return label
-    }()
+    private lazy var likesLabel =  UILabel()
     
     private lazy var statsView: UIView = {
         // 하위뷰 뼈대
@@ -214,6 +210,22 @@ class TweetHeader: UICollectionReusableView {
     
     
     // MARK: - Helpers
+    
+    // 실제 트윗 정보가 넘어오면 실행할 부분 뷰 모델에서 동적 데이터 받아오기 
+    func configure() {
+            guard let tweet = tweet else { return }
+
+            let viewModel = TweetViewModel(tweet: tweet)
+
+            captionLabel.text = tweet.caption
+            fullnameLabel.text = tweet.user.fullname
+            usernameLabel.text = viewModel.usernameText
+            profileImageView.sd_setImage(with: viewModel.profileImageUrl)
+            dateLabel.text = viewModel.headerTimestamp
+            retweetsLabel.attributedText = viewModel.retweetsAttributedString
+            likesLabel.attributedText = viewModel.likesAttributedString
+        }
+    
     // 4가지 버튼을 편하게 만들기 위한 함수
     func createButton(withImageName imageName: String) -> UIButton {
         let button = UIButton(type: .system)

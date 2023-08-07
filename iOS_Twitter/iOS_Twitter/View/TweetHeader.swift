@@ -28,14 +28,14 @@ class TweetHeader: UICollectionReusableView {
     
     private let fullnameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20)
+        label.font = UIFont.systemFont(ofSize: 14)
         label.text = "Peter Parker"
         return label
     }()
     
     private let usernameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .lightGray
         label.text = "spiderman"
         return label
@@ -46,7 +46,7 @@ class TweetHeader: UICollectionReusableView {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20)
         label.numberOfLines = 0
-        label.text = "Some text caption from spiderman for now"
+        label.text = "Some test caption from spiderman for now"
         return label
     }()
     
@@ -86,7 +86,7 @@ class TweetHeader: UICollectionReusableView {
     }()
     
     private lazy var statsView: UIView = {
-        // 하위뷰 뼈대 
+        // 하위뷰 뼈대
         let view = UIView()
         view.backgroundColor = .white
         
@@ -114,6 +114,33 @@ class TweetHeader: UICollectionReusableView {
         
         return view
     }()
+    
+    
+    // MARK: - 4개의 버튼
+    private lazy var commentButton: UIButton = {
+        let button = createButton(withImageName: "comment")
+        button.addTarget(self, action: #selector(handleCommentTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var retweetButton: UIButton = {
+        let button = createButton(withImageName: "retweet")
+        button.addTarget(self, action: #selector(handleRetweetTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var likeButton: UIButton = {
+        let button = createButton(withImageName: "like")
+        button.addTarget(self, action: #selector(handleLikeTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var shareButton: UIButton = {
+        let button = createButton(withImageName: "share")
+        button.addTarget(self, action: #selector(handleShareTapped), for: .touchUpInside)
+        return button
+    }()
+    
     
     // MARK: - Lifecycle
     
@@ -144,6 +171,14 @@ class TweetHeader: UICollectionReusableView {
         // 하위 뷰 올리기
         addSubview(statsView)
         statsView.anchor(top: dateLabel.bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 20, height: 40)
+        
+        // 4개의 버튼을 담은 스택뷰 올리기
+        let actionStack = UIStackView(arrangedSubviews: [commentButton, retweetButton, likeButton, shareButton])
+        actionStack.spacing = 72
+        
+        addSubview(actionStack)
+        actionStack.centerX(inView: self) // 현제 메인 뷰의 가운데 정렬
+        actionStack.anchor(bottom: bottomAnchor, paddingBottom: 12)
     }
     
     required init?(coder: NSCoder) {
@@ -158,6 +193,34 @@ class TweetHeader: UICollectionReusableView {
     
     @objc func showActionSheet() {
         print("우측 옵션 버튼을 클릭")
+    }
+    
+    
+    @objc func handleCommentTapped() {
+        
+    }
+    
+    @objc func handleRetweetTapped() {
+        
+    }
+    
+    @objc func handleLikeTapped() {
+        
+    }
+    
+    @objc func handleShareTapped() {
+        
+    }
+    
+    
+    // MARK: - Helpers
+    // 4가지 버튼을 편하게 만들기 위한 함수
+    func createButton(withImageName imageName: String) -> UIButton {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(named: imageName), for: .normal)
+        button.tintColor = .darkGray
+        button.setDimensions(width: 20, height: 20)
+        return button
     }
     
 }

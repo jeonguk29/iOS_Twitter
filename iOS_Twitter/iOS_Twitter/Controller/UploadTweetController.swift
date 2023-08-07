@@ -13,6 +13,7 @@ class UploadTweetController: UIViewController {
     
     private let user: User
     private let config: UploadTweetConfiguration
+    private lazy var viewModel = UploadTweetViewModel(config: config)
     
     private lazy var actionButton: UIButton = {
         let button = UIButton(type: .system)
@@ -30,7 +31,7 @@ class UploadTweetController: UIViewController {
         return button
     }()
     
-    private let ProfileImageView: UIImageView = {
+    private let profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.clipsToBounds = true
@@ -39,6 +40,15 @@ class UploadTweetController: UIViewController {
         iv.backgroundColor = .twitterBlue
         return iv
     }()
+    
+    private lazy var replyLabel: UILabel = {
+          let label = UILabel()
+          label.font = UIFont.systemFont(ofSize: 14)
+          label.textColor = .lightGray
+          label.text = "Replying to Spiderman"
+          label.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+          return label
+      }()
     
     private let captionTextView = CaptionTextView() // 하위 클래스를 만들어 코드를 분리 시켰음 
     
@@ -95,10 +105,15 @@ class UploadTweetController: UIViewController {
         view.backgroundColor = .white
         configureNavigationBar()
         
-        let stack = UIStackView(arrangedSubviews: [ProfileImageView, captionTextView])
-        stack.axis = .horizontal
+        let imageCaptionStack = UIStackView(arrangedSubviews: [profileImageView, captionTextView])
+        imageCaptionStack.axis = .horizontal
+        imageCaptionStack.spacing = 12
+        imageCaptionStack.alignment = .leading
+        
+        let stack = UIStackView(arrangedSubviews: [replyLabel, imageCaptionStack])
+        stack.axis = .vertical
+        // stack.alignment = .leading
         stack.spacing = 12
-        stack.alignment = .leading
         
         view.addSubview(stack)
         stack.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 16)
@@ -106,7 +121,14 @@ class UploadTweetController: UIViewController {
         
         // 이미 MainTabController에서 FeedController로 이미지 전달하기 위해 user에 값이 있다는 것을 보장하기 때문에
         // 이렇게 코드를 작성하면 앱의 성능을 훨씬 더 좋게 만들어줌 불필요한 API 호출이 필요 없어서
-        ProfileImageView.sd_setImage(with: user.profileImageUrl, completed: nil)
+        profileImageView.sd_setImage(with: user.profileImageUrl, completed: nil)
+        
+        actionButton.setTitle(viewModel.actionButtonTitle, for: .normal)
+        captionTextView.placeholderLabel.text = viewModel.placeholderText
+        
+        replyLabel.isHidden = !viewModel.shouldShowReplyLabel
+        guard let replyText = viewModel.replyText else { return }
+        replyLabel.text = replyText
         
     }
     

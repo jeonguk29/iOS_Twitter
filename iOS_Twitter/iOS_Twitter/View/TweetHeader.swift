@@ -174,7 +174,8 @@ class TweetHeader: UICollectionReusableView {
         
         addSubview(actionStack)
         actionStack.centerX(inView: self) // 현제 메인 뷰의 가운데 정렬
-        actionStack.anchor(bottom: bottomAnchor, paddingBottom: 12)
+        actionStack.anchor(top: statsView.bottomAnchor, paddingTop: 16)
+        // 왼쪽 지점에 위치, 그다음 간격(패딩) 정하기
     }
     
     required init?(coder: NSCoder) {

@@ -13,7 +13,8 @@ import FirebaseDatabase
 struct TweetService {
     static let shared = TweetService()
     
-    func uploadTweet(caption: String, type: UploadTweetConfiguration, completion: @escaping(Error?, DatabaseReference) -> Void) {
+    // 별명 적용 : DatabaseCompletion
+    func uploadTweet(caption: String, type: UploadTweetConfiguration, completion: @escaping(DatabaseCompletion)) {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         // 누가 트윗을 남겼는지 uid를 저장해줘야함
         
@@ -91,5 +92,21 @@ struct TweetService {
             // 프로필 이미지를 눌렀을때 user.uid에 해당하는것을 파이어베이스의가서 실제 값들을 건져오면 됨
         }
     }
+        
+    func fetchReplies(forTweet tweet: Tweet, completion: @escaping([Tweet]) -> Void) {
+          var tweets = [Tweet]()
+
+          REF_TWEET_REPLIES.child(tweet.tweetID).observe(.childAdded) { snapshot in
+              guard let dictionary = snapshot.value as? [String: AnyObject] else { return }
+              guard let uid = dictionary["uid"] as? String else { return }
+              let tweetID = snapshot.key
+
+              UserService.shared.fetchUser(uid: uid) { user in
+                  let tweet = Tweet(user: user, tweetID: tweetID, dictionary: dictionary)
+                  tweets.append(tweet)
+                  completion(tweets)
+              }
+          }
+      }
     
 }

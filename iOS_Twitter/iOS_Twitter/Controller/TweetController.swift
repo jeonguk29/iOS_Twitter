@@ -90,7 +90,10 @@ extension TweetController: UICollectionViewDelegateFlowLayout {
     //컬렉션 뷰의 헤더 만들기
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         
-        return CGSize(width: view.frame.width, height: 270)
+        let viewModel = TweetViewModel(tweet: tweet)
+        let captionHeight = viewModel.size(forWidth: view.frame.width).height
+
+        return CGSize(width: view.frame.width, height: captionHeight + 260)
     }
     
     

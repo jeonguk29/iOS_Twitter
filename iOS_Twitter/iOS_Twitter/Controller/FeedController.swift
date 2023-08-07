@@ -124,7 +124,12 @@ extension FeedController: UICollectionViewDelegateFlowLayout {
     
     // 각 셀의 크기를 지정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 120)
+        
+        //동적 셀 크기 조정
+        let tweet = tweets[indexPath.row]
+        let viewModel = TweetViewModel(tweet: tweet)
+        let height = viewModel.size(forWidth: view.frame.width).height
+        return CGSize(width: view.frame.width, height: height + 72) // height + 72 이유 : 캡션과 아래 4가지 버튼들 사이 여백을 주기 위함 
     }
 }
 

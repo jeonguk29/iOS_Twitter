@@ -11,6 +11,7 @@ import UIKit
 // 프로토콜을 만들어서 현제 내 트윗셀을 내 컨트롤러로 전달할 것임
 protocol TweetCellDelegate: class {
     func handelProfileImageTapped(_ cell: TweetCell) // 컨트롤러에게 위임할 작업을 명시
+    func handleReplyTapped(_ cell: TweetCell)
 }
 
 class TweetCell:UICollectionViewCell {
@@ -137,7 +138,7 @@ class TweetCell:UICollectionViewCell {
     }
     
     @objc func handleCommentTapped(){
-        
+        delegate?.handleReplyTapped(self)
     }
     
     @objc func handleRetweetTapped(){

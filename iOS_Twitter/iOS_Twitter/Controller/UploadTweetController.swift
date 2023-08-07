@@ -12,6 +12,7 @@ class UploadTweetController: UIViewController {
     // MARK: -  Properties
     
     private let user: User
+    private let config: UploadTweetConfiguration
     
     private lazy var actionButton: UIButton = {
         let button = UIButton(type: .system)
@@ -43,8 +44,9 @@ class UploadTweetController: UIViewController {
     
     // MARK: - Lifecycle
     
-    init(user: User) {
+    init(user: User, config: UploadTweetConfiguration) {
         self.user = user
+        self.config = config
         super.init(nibName: nil, bundle: nil)
     }   // 사용자 이미지를 가져오기 위해 불필요한 API 요청 할필요가 없음 이전화면에서 이미 사용자 데이터를 호출해 불러왔으니까 받기만 하면 되는 것임
     
@@ -55,7 +57,13 @@ class UploadTweetController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        
+
+        switch config {
+        case .tweet:
+            print("DEBUG: Config is tweet")
+        case .reply(let tweet):
+            print("DEBUG: Replying to \(tweet.caption)")
+        }
     }
     
     // MARK: - Selectors

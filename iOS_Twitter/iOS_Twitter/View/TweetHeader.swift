@@ -11,19 +11,153 @@ class TweetHeader: UICollectionReusableView {
     
     
     // MARK: - Properties
+    private lazy var profileImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFit
+        iv.clipsToBounds = true
+        iv.setDimensions(width: 48, height: 48)
+        iv.layer.cornerRadius = 48 / 2
+        iv.backgroundColor = .twitterBlue
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleProfileImageTapped))
+        iv.addGestureRecognizer(tap)
+        iv.isUserInteractionEnabled = true
+        
+        return iv
+    }()
     
+    private let fullnameLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 20)
+        label.text = "Peter Parker"
+        return label
+    }()
+    
+    private let usernameLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .lightGray
+        label.text = "spiderman"
+        return label
+    }()
+    
+    // 내용 표시
+    private let captionLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 20)
+        label.numberOfLines = 0
+        label.text = "Some text caption from spiderman for now"
+        return label
+    }()
+    
+    // 날짜 표시
+    private let dateLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .lightGray
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textAlignment = .left
+        label.text = "6:33 PM - 1/28/2020"
+        return label
+    }()
+    
+    
+    // MARK: - 헤더 맨 오른쪽 옵션 버튼
+    private lazy var optionButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .lightGray
+        button.setImage(UIImage(named: "down_arrow_24pt"), for: .normal)
+        button.addTarget(self, action: #selector(showActionSheet), for: .touchUpInside)
+        return button
+    }()
+    
+    // MARK: - 리트윗, 좋아요 하위 뷰 만들기
+    private lazy var retweetsLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.text = "0 retweets"
+        return label
+    }()
+    
+    private lazy var likesLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.text = "0 likes"
+        return label
+    }()
+    
+    private lazy var statsView: UIView = {
+        // 하위뷰 뼈대 
+        let view = UIView()
+        view.backgroundColor = .white
+        
+        
+        // 상위 구분선
+        let divider1 = UIView()
+        divider1.backgroundColor = .systemGroupedBackground
+        view.addSubview(divider1)
+        divider1.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingLeft: 8, height: 1.0)
+        
+        // 구분선 사이 담을 내용
+        let stack = UIStackView(arrangedSubviews: [retweetsLabel, likesLabel])
+        stack.axis = .horizontal
+        stack.spacing = 12
+        
+        view.addSubview(stack)
+        stack.centerY(inView: view)
+        stack.anchor(left: view.leftAnchor, paddingLeft: 16)
+        
+        // 히위 구분선
+        let divider2 = UIView()
+        divider2.backgroundColor = .systemGroupedBackground
+        view.addSubview(divider2)
+        divider2.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 8, height: 1.0)
+        
+        return view
+    }()
     
     // MARK: - Lifecycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .systemPurple
+        backgroundColor = .white
+        let labelStack = UIStackView(arrangedSubviews: [fullnameLabel, usernameLabel])
+        labelStack.axis = .vertical // 세로
+        labelStack.spacing = -6
+        
+        let stack = UIStackView(arrangedSubviews: [profileImageView, labelStack])
+        stack.spacing = 12
+        
+        addSubview(stack) // 기본 수평
+        stack.anchor(top: topAnchor, left: leftAnchor, paddingTop: 16, paddingLeft: 16)
+        
+        addSubview(captionLabel)
+        captionLabel.anchor(top: stack.bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 20, paddingLeft: 16, paddingRight: 16)
+        
+        addSubview(dateLabel)
+        dateLabel.anchor(top: captionLabel.bottomAnchor, left: leftAnchor, paddingTop: 20, paddingLeft: 16)
+        
+        addSubview(optionButton)
+        optionButton.centerY(inView: stack)
+        optionButton.anchor(right: rightAnchor, paddingRight: 8)
+        
+        // 하위 뷰 올리기
+        addSubview(statsView)
+        statsView.anchor(top: dateLabel.bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 20, height: 40)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Selectors
+    
+    @objc func handleProfileImageTapped() {
+        print("유저의 프로파일로 이동")
+    }
+    
+    @objc func showActionSheet() {
+        print("우측 옵션 버튼을 클릭")
+    }
     
 }

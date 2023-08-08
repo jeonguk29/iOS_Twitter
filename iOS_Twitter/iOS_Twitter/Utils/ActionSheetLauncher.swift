@@ -27,6 +27,27 @@ class ActionSheetLauncher: NSObject { //NSObject 이유
             return view
         }()
     
+    // 취소 버튼 만들고 뷰에 올리기
+      private lazy var cancelButton: UIButton = {
+          let button = UIButton(type: .system)
+          button.setTitle("Cancel", for: .normal)
+          button.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+          button.setTitleColor(.black, for: .normal)
+          button.backgroundColor = .systemGroupedBackground
+          button.addTarget(self, action: #selector(handleDismissal), for: .touchUpInside)
+          return button
+      }()
+    
+    private lazy var footerView: UIView = {
+          let view = UIView()
+          view.addSubview(cancelButton)
+          cancelButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+          cancelButton.anchor(left: view.leftAnchor, right: view.rightAnchor, paddingLeft: 12, paddingRight: 12)
+          cancelButton.centerY(inView: view)
+          cancelButton.layer.cornerRadius = 50 / 2
+          return view
+      }()
+    
     // MARK: - Lifecycle
     
     init(user: User) {
@@ -54,20 +75,22 @@ class ActionSheetLauncher: NSObject { //NSObject 이유
               self.window = window
 
         window.addSubview(blackView) // 이렇게 하면 UI 창의 전체 화면에 검은색 뷰를 추가할 수 있습니다.
-                blackView.frame = window.frame
+            blackView.frame = window.frame
         
               window.addSubview(tableView)
-              tableView.frame = CGRect(x: 0, y: window.frame.height , width: window.frame.width, height: 300)
-
+        
+        let height = CGFloat(3 * 60) + 100// 우리는 높이를 +100으로 했습니다. 바닥과 상단에 약간의 공간을 원하기 때문
+               tableView.frame = CGRect(x: 0, y: window.frame.height, width: window.frame.width, height: height)
+             
         // 블랙 뷰를 서서히 적용 하는 애니메이션
               UIView.animate(withDuration: 0.5) {
                   self.blackView.alpha = 1
-                  self.tableView.frame.origin.y -= 300
+                  self.tableView.frame.origin.y -= height
               }
     }
     
     func configureTableView() {
-            tableView.backgroundColor = .red
+            tableView.backgroundColor = .white
             tableView.delegate = self
             tableView.dataSource = self
             tableView.rowHeight = 60
@@ -75,13 +98,19 @@ class ActionSheetLauncher: NSObject { //NSObject 이유
             tableView.layer.cornerRadius = 5
             tableView.isScrollEnabled = false
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(ActionSheetCell.self, forCellReuseIdentifier: reuseIdentifier)
     }
 }
 
 // MARK: - UITableViewDelegate
 extension ActionSheetLauncher: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return footerView
+    }
 
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 60
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -91,7 +120,7 @@ extension ActionSheetLauncher: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ActionSheetCell
         return cell
     }
     

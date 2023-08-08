@@ -7,6 +7,11 @@
 
 import UIKit
 
+// 작업 시트를 위해 위임할 프로토콜 생성
+protocol TweetHeaderDelegate: class {
+    func showActionSheet()
+}
+
 class TweetHeader: UICollectionReusableView {
     
     
@@ -16,6 +21,9 @@ class TweetHeader: UICollectionReusableView {
     var tweet: Tweet? {
           didSet { configure() }
       }
+    
+    weak var delegate: TweetHeaderDelegate? // 델리게이트 변수 생성
+    
     
     private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
@@ -190,6 +198,7 @@ class TweetHeader: UICollectionReusableView {
     
     @objc func showActionSheet() {
         print("우측 옵션 버튼을 클릭")
+        delegate?.showActionSheet()
     }
     
     

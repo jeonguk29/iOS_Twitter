@@ -17,6 +17,7 @@ class TweetController: UICollectionViewController {
     // MARK: - Properties
     
     private let tweet: Tweet
+    private let actionSheetLauncher: ActionSheetLauncher
     private var replies = [Tweet]() {
            didSet { collectionView.reloadData() }
        }
@@ -25,6 +26,7 @@ class TweetController: UICollectionViewController {
     
     init(tweet: Tweet) {
         self.tweet = tweet
+        self.actionSheetLauncher = ActionSheetLauncher(user: tweet.user)
         let layout = UICollectionViewFlowLayout()
         super.init(collectionViewLayout: layout)
     }
@@ -92,7 +94,7 @@ extension TweetController {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as! TweetHeader
         
         header.tweet = tweet
-        
+        header.delegate = self
         return header
     }
 }
@@ -113,5 +115,12 @@ extension TweetController: UICollectionViewDelegateFlowLayout {
     // 각 셀의 크기를 지정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width, height: 120)
+    }
+}
+
+// 사용자 작업 시트를 위한 프로토콜을 채택하여 구현 
+extension TweetController: TweetHeaderDelegate {
+    func showActionSheet() {
+        actionSheetLauncher.show()
     }
 }

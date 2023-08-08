@@ -10,7 +10,7 @@ struct ActionSheetViewModel {
 
     private let user: User
 
-    var option: [ActionSheetOptions] {
+    var options: [ActionSheetOptions] {
         var results = [ActionSheetOptions]()
         // 아래서 만든 케이스들을 어떤 조건에따라 각각 배치할지 파악해야함
         

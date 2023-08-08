@@ -17,16 +17,17 @@ class TweetController: UICollectionViewController {
     // MARK: - Properties
     
     private let tweet: Tweet
-    private let actionSheetLauncher: ActionSheetLauncher
+    private var actionSheetLauncher: ActionSheetLauncher!
     private var replies = [Tweet]() {
-           didSet { collectionView.reloadData() }
-       }
+        didSet { collectionView.reloadData() }
+    }
     
     // MARK: - Lifecycle
     
     init(tweet: Tweet) {
         self.tweet = tweet
-        self.actionSheetLauncher = ActionSheetLauncher(user: tweet.user)
+        // 현재 사용자가 아닌 경우 해당 사용자를 팔로우하고 있는지 확인하고 초기화 해야함
+        //self.actionSheetLauncher = ActionSheetLauncher(user: tweet.user)
         let layout = UICollectionViewFlowLayout()
         super.init(collectionViewLayout: layout)
     }
@@ -39,18 +40,18 @@ class TweetController: UICollectionViewController {
         super.viewDidLoad()
         configureCollectionView()
         fetchReplies()
-//        print("DEBUG: Tweet caption is \(tweet.caption)")
+        //        print("DEBUG: Tweet caption is \(tweet.caption)")
     }
     
     // MARK: - API
-     
-     func fetchReplies() {
-         TweetService.shared.fetchReplies(forTweet: tweet) { replies in
-             self.replies = replies // 답글 트윗 배열 받기
-         }
-     }
-
-     // MARK: - Helpers
+    
+    func fetchReplies() {
+        TweetService.shared.fetchReplies(forTweet: tweet) { replies in
+            self.replies = replies // 답글 트윗 배열 받기
+        }
+    }
+    
+    // MARK: - Helpers
     
     func configureCollectionView(){
         collectionView.backgroundColor = .white
@@ -63,7 +64,13 @@ class TweetController: UICollectionViewController {
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: headerIdentifier)
         
-     
+        
+    }
+    
+    fileprivate func showActionSheet(forUser user: User) {
+        actionSheetLauncher = ActionSheetLauncher(user: user)
+        actionSheetLauncher.delegate = self
+        actionSheetLauncher.show()
     }
     
     
@@ -107,7 +114,7 @@ extension TweetController: UICollectionViewDelegateFlowLayout {
         
         let viewModel = TweetViewModel(tweet: tweet)
         let captionHeight = viewModel.size(forWidth: view.frame.width).height
-
+        
         return CGSize(width: view.frame.width, height: captionHeight + 260)
     }
     
@@ -118,9 +125,42 @@ extension TweetController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// 사용자 작업 시트를 위한 프로토콜을 채택하여 구현 
+// MARK: - TweetHeaderDelegate
+// 사용자 작업 시트를 위한 프로토콜을 채택하여 구현
 extension TweetController: TweetHeaderDelegate {
     func showActionSheet() {
-        actionSheetLauncher.show()
+        // 현재 사용자가 아닌 경우 해당 사용자를 팔로우하고 있는지 확인하는 부분
+        if tweet.user.isCurrentUser {
+            showActionSheet(forUser: tweet.user)
+        } else {
+            UserService.shared.checkIfUserIsFollowd(uid: tweet.user.uid) { isFollowed in
+                var user = self.tweet.user
+                user.isFollowed = isFollowed
+                self.showActionSheet(forUser: user)
+            }
+        }
     }
 }
+
+// MARK: - ActionSheetLauncherDelegate
+extension TweetController: ActionSheetLauncherDelegate {
+    
+    // 트윗 컨트롤러에서 해당 선택 항목에 대한 작업을 처리
+    func didSelect(option: ActionSheetOptions) {
+        switch option {
+        case .follow(let user):
+            UserService.shared.followUser(uid: user.uid) { (error, red) in
+                //
+            }
+        case .unfollow(let user):
+            UserService.shared.unfollowUser(uid: user.uid) { (error, red) in
+                //
+            }
+        case .report:
+            print()
+        case .delete:
+            print()
+        }
+    }
+}
+

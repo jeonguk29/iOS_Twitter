@@ -16,6 +16,7 @@ class ActionSheetLauncher: NSObject { //NSObject 이유
     private let user: User
     private let tableView = UITableView()
     private var window: UIWindow?
+    private lazy var viewModel = ActionSheetViewModel(user: user) // user 값이 들어온 다음 만들어야 함으로 lazy var
     
     private lazy var blackView: UIView = {
             let view = UIView()
@@ -79,7 +80,7 @@ class ActionSheetLauncher: NSObject { //NSObject 이유
         
               window.addSubview(tableView)
         
-        let height = CGFloat(3 * 60) + 100// 우리는 높이를 +100으로 했습니다. 바닥과 상단에 약간의 공간을 원하기 때문
+        let height = CGFloat(viewModel.option.count * 60) + 100// 우리는 높이를 +100으로 했습니다. 바닥과 상단에 약간의 공간을 원하기 때문
                tableView.frame = CGRect(x: 0, y: window.frame.height, width: window.frame.width, height: height)
              
         // 블랙 뷰를 서서히 적용 하는 애니메이션
@@ -116,11 +117,14 @@ extension ActionSheetLauncher: UITableViewDelegate {
 // MARK: - UITableViewDataSource
 extension ActionSheetLauncher: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return viewModel.option.count
+        // 뷰 모델이 필요한 옵션수를 반환함
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ActionSheetCell
+        
+        cell.option = viewModel.option[indexPath.row]
         return cell
     }
     

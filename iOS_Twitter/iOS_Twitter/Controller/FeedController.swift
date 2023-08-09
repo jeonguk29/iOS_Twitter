@@ -141,8 +141,15 @@ extension FeedController: TweetCellDelegate {
         print("DEBUG: Handle like tapped..")
         
         guard var tweet = cell.tweet else { return }
-        cell.tweet?.didLike.toggle()
-        print("DEBUG: Tweet is liked is \(cell.tweet?.didLike)")
+//        cell.tweet?.didLike.toggle()
+//        print("DEBUG: Tweet is liked is \(cell.tweet?.didLike)")
+        TweetService.shared.likeTweet(tweet: tweet) { (err, ref) in
+            cell.tweet?.didLike.toggle()
+            // 셀에 있는 개체를 실제로 업데이트 하는 부분 API호출시 서버먼저 처리하고 여기서 화면 처리를 하는 것임
+            let likes = tweet.didLike ? tweet.likes - 1 : tweet.likes + 1
+            cell.tweet?.likes = likes
+        }
+        
     }
     
     

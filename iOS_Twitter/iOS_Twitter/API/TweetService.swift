@@ -121,7 +121,7 @@ struct TweetService {
             //그래서 tweet-like 들어가서 트윗키찾고 좋아요 누른 유저 아이디찾고 지우기
             //user-likes들어가서 현재 사용자 ID를 찾은 다음 좋아요 취소한 트윗을 찾아 지우기
             REF_USER_LIKES.child(uid).child(tweet.tweetID).removeValue { (err, ref) in
-                REF_USER_LIKES.child(tweet.tweetID).removeValue(completionBlock: completion)
+                REF_TWEET_LIKES.child(tweet.tweetID).removeValue(completionBlock: completion)
             }
         } else {
             // add like data to firebase - like tweet
@@ -131,5 +131,13 @@ struct TweetService {
             
         }
     }
+    
+    func checkIfUserLikedTweet(_ tweet: Tweet, completion: @escaping(Bool) -> Void) {
+         guard let uid = Auth.auth().currentUser?.uid else { return }
+
+         REF_USER_LIKES.child(uid).child(tweet.tweetID).observeSingleEvent(of: .value) { snapshot in
+             completion(snapshot.exists())
+         }
+     }
     
 }

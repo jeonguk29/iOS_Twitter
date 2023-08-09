@@ -46,8 +46,21 @@ class FeedController: UICollectionViewController{
     func fetchTweets(){
         TweetService.shared.fatchTweets { tweets in
             self.tweets = tweets
+            self.checkIfUserLikedTweets()
         }
     }
+    
+    func checkIfUserLikedTweets() {
+        // 2. 실제 데이터베이스에 저장된 정보로 모든 트윗을 돌리면서 확인하고 화면에 적용하기 위한 작업
+            for (index, tweet) in tweets.enumerated() {
+                TweetService.shared.checkIfUserLikedTweet(tweet) { didLike in
+                    guard didLike == true else { return }
+
+                    self.tweets[index].didLike = true
+                    // 값이 수정되면  didSet {collectionView.reloadData()}가 호출되서 다시 컬렉션뷰를 리로드 => 좋아요 표시
+                }
+            }
+        }
     
     // MARK: - Helpers
     
@@ -170,6 +183,5 @@ extension FeedController: TweetCellDelegate {
         let controller = ProfileController(user: user)
         navigationController?.pushViewController(controller, animated: true)
     }// 해당 출력이 나온다면 트윗 셀에서 컨트롤러로 작업을 성공적으로 위임한것임
-    
     
 }

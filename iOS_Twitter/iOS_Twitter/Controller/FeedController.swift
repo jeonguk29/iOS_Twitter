@@ -147,7 +147,9 @@ extension FeedController: TweetCellDelegate {
             cell.tweet?.didLike.toggle()
             // 셀에 있는 개체를 실제로 업데이트 하는 부분 API호출시 서버먼저 처리하고 여기서 화면 처리를 하는 것임
             let likes = tweet.didLike ? tweet.likes - 1 : tweet.likes + 1
-            cell.tweet?.likes = likes
+            cell.tweet?.likes = likes // 이코드 실행시 Cell의 didSet이 수행됨
+            //트윗을 설정하든, 트윗안에 사용자를 재설정하든, 트윗의 좋아요 수를 재설정하든, didSet이 호출되는 것임
+            //그런다음 configure()이 호출 되고 뷰모델러 트윗을 넘겨준 다음 화면에 정상적인 값을 표시할 수 있음
         }
         
     }

@@ -110,21 +110,26 @@ struct TweetService {
       }
     
     func likeTweet(tweet: Tweet, completion: @escaping(DatabaseCompletion)) {
-            guard let uid = Auth.auth().currentUser?.uid else { return }
-            
-            // 좋아요 누르면 카운트 증감
-            let likes = tweet.didLike ? tweet.likes - 1 : tweet.likes + 1
-            REF_TWEETS.child(tweet.tweetID).child("likes").setValue(likes)
-
-            if tweet.didLike {
-                // remove like data from firebase - unlike tweet
-            } else {
-                // add like data to firebase - like tweet
-                REF_USER_LIKES.child(uid).updateChildValues([tweet.tweetID: 1]) { (err, ref) in
-                    REF_TWEET_LIKES.child(tweet.tweetID).updateChildValues([uid: 1], withCompletionBlock: completion)
-                }
-
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        // 좋아요 누르면 카운트 증감
+        let likes = tweet.didLike ? tweet.likes - 1 : tweet.likes + 1
+        REF_TWEETS.child(tweet.tweetID).child("likes").setValue(likes)
+        
+        if tweet.didLike {
+            // remove like data from firebase - unlike tweet
+            //그래서 tweet-like 들어가서 트윗키찾고 좋아요 누른 유저 아이디찾고 지우기
+            //user-likes들어가서 현재 사용자 ID를 찾은 다음 좋아요 취소한 트윗을 찾아 지우기
+            REF_USER_LIKES.child(uid).child(tweet.tweetID).removeValue { (err, ref) in
+                REF_USER_LIKES.child(tweet.tweetID).removeValue(completionBlock: completion)
             }
+        } else {
+            // add like data to firebase - like tweet
+            REF_USER_LIKES.child(uid).updateChildValues([tweet.tweetID: 1]) { (err, ref) in
+                REF_TWEET_LIKES.child(tweet.tweetID).updateChildValues([uid: 1], withCompletionBlock: completion)
+            }
+            
         }
+    }
     
 }

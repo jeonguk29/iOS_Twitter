@@ -12,6 +12,7 @@ import UIKit
 protocol TweetCellDelegate: class {
     func handelProfileImageTapped(_ cell: TweetCell) // 컨트롤러에게 위임할 작업을 명시
     func handleReplyTapped(_ cell: TweetCell)
+    func handleLikeTapped(_ cell: TweetCell) // 트윗 좋아요 동작처리를 위임할 메서드
 }
 
 class TweetCell:UICollectionViewCell {
@@ -76,7 +77,7 @@ class TweetCell:UICollectionViewCell {
         button.setImage(UIImage(named: "like"), for: .normal)
         button.tintColor = .darkGray
         button.setDimensions(width: 20, height: 20)
-        button.addTarget(self, action: #selector(handleLikeButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleLikeTapped), for: .touchUpInside)
         return button
     }()
     
@@ -145,8 +146,8 @@ class TweetCell:UICollectionViewCell {
         
     }
     
-    @objc func handleLikeButtonTapped(){
-        
+    @objc func handleLikeTapped(){
+        delegate?.handleLikeTapped(self)
     }
     
     @objc func handleShareTapped(){

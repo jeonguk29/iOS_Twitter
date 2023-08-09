@@ -137,16 +137,24 @@ extension FeedController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - TweetCellDelegate
 extension FeedController: TweetCellDelegate {
-
+    func handleLikeTapped(_ cell: TweetCell) {
+        print("DEBUG: Handle like tapped..")
+        
+        guard var tweet = cell.tweet else { return }
+        cell.tweet?.didLike.toggle()
+        print("DEBUG: Tweet is liked is \(cell.tweet?.didLike)")
+    }
+    
+    
     func handleReplyTapped(_ cell: TweetCell) {
-            guard let tweet = cell.tweet else { return }
-            
-            // 이미지 표시 등을 위해 유저 정보를 전달, .reply 인것을 알려주기
-            let controller = UploadTweetController(user: tweet.user, config: .reply(tweet))
-            let nav = UINavigationController(rootViewController: controller)
-            nav.modalPresentationStyle = .fullScreen
-            present(nav, animated: true, completion: nil)
-        }
+        guard let tweet = cell.tweet else { return }
+        
+        // 이미지 표시 등을 위해 유저 정보를 전달, .reply 인것을 알려주기
+        let controller = UploadTweetController(user: tweet.user, config: .reply(tweet))
+        let nav = UINavigationController(rootViewController: controller)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true, completion: nil)
+    }
     
     func handelProfileImageTapped(_ cell: TweetCell) {
         guard let user = cell.tweet?.user else { return }
@@ -154,5 +162,5 @@ extension FeedController: TweetCellDelegate {
         navigationController?.pushViewController(controller, animated: true)
     }// 해당 출력이 나온다면 트윗 셀에서 컨트롤러로 작업을 성공적으로 위임한것임
     
-
+    
 }

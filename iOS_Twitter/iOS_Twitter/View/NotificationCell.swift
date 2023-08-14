@@ -6,6 +6,13 @@
 //
 
 import UIKit
+import SDWebImage
+
+
+// 셀에서 컨트롤러로 작업을 위임하는 프로토콜 구현
+protocol NotificationCellDelegate: class {
+    func didTapProfileImage(_ cell: NotificationCell) // 사용자 프로필로 이동
+}
 
 // 알림 셀 구현 
 class NotificationCell: UITableViewCell {
@@ -15,20 +22,23 @@ class NotificationCell: UITableViewCell {
         didSet {configure()}
     }
     
+    weak var delegate: NotificationCellDelegate?
+
     private lazy var profileImageView: UIImageView = {
-       let iv = UIImageView()
+        let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.clipsToBounds = true
         iv.setDimensions(width: 40, height: 40)
         iv.layer.cornerRadius = 40 / 2
         iv.backgroundColor = .twitterBlue
-
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleProfileImageTapped))
         iv.addGestureRecognizer(tap)
         iv.isUserInteractionEnabled = true
-
+        
         return iv
     }()
+    
 
     let notificationLabel: UILabel = {
         let label = UILabel()
@@ -44,13 +54,13 @@ class NotificationCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         let stack = UIStackView(arrangedSubviews: [profileImageView, notificationLabel])
-        stack.spacing = 8
-        stack.alignment = .center
+                stack.spacing = 8
+                stack.alignment = .center
 
-        addSubview(stack)
-        // 스택 y축 에맞게 왼쪽, 오른쪽 고정
+        contentView.addSubview(stack) // 바뀐 부분
         stack.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 12)
         stack.anchor(right: rightAnchor, paddingRight: 12)
+            
     }
 
     required init?(coder: NSCoder) {
@@ -59,7 +69,8 @@ class NotificationCell: UITableViewCell {
 
     // MARK: - Selector
     @objc func handleProfileImageTapped() {
-
+        print("HERE!")
+        delegate?.didTapProfileImage(self)
     }
     
     

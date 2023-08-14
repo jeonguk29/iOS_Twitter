@@ -69,21 +69,44 @@ struct TweetService {
         REF_USER_TWEETS.child(user.uid).observe(.childAdded) { snapshot in
             let tweetID = snapshot.key
             print(snapshot.key)
-            REF_TWEETS.child(tweetID).observeSingleEvent(of: .value) { snapshot in
-                guard let dictionary = snapshot.value as? [String: Any] else {return}
-                guard let uid = dictionary["uid"] as? String else {return}
-                
-                UserService.shared.fetchUser(uid: uid) { user in
-                    let tweet = Tweet(user: user, tweetID: tweetID, dictionary: dictionary)
-                    tweets.append(tweet)// 모든 트윗을 찾아 담고 반환
-                    completion(tweets)
-                }
+            
+            
+            // 리팩토링 작업
+            self.fetchTweet(with: tweetID) { tweet in
+                tweets.append(tweet)// 모든 트윗을 찾아 담고 반환
+                completion(tweets)
             }
+            
+//            REF_TWEETS.child(tweetID).observeSingleEvent(of: .value) { snapshot in
+//                guard let dictionary = snapshot.value as? [String: Any] else {return}
+//                guard let uid = dictionary["uid"] as? String else {return}
+//
+//                UserService.shared.fetchUser(uid: uid) { user in
+//                    let tweet = Tweet(user: user, tweetID: tweetID, dictionary: dictionary)
+//
+//                }
+//            }
             
             // 프로필 이미지를 눌렀을때 user.uid에 해당하는것을 파이어베이스의가서 실제 값들을 건져오면 됨
         }
     }
         
+    
+    
+    // 알림탭에서, 상대방이 좋아요 누른 트윗으로 이동하는 메서드 : 위 코드를 복사
+    func fetchTweet(with tweetID: String, completion: @escaping(Tweet) -> Void) {
+        
+        REF_TWEETS.child(tweetID).observeSingleEvent(of: .value) { snapshot in
+            guard let dictionary = snapshot.value as? [String: Any] else { return }
+            guard let uid = dictionary["uid"] as? String else { return }
+            
+            UserService.shared.fetchUser(uid: uid) { user in
+                let tweet = Tweet(user: user, tweetID: tweetID, dictionary: dictionary)
+                completion(tweet)
+            }
+        }
+    }
+    
     func fetchReplies(forTweet tweet: Tweet, completion: @escaping([Tweet]) -> Void) {
           var tweets = [Tweet]()
 

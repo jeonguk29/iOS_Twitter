@@ -25,3 +25,6 @@ let REF_TWEET_REPLIES = DB_REF.child("tweet-replies")
 // likes
 let REF_USER_LIKES = DB_REF.child("user-likes") // 유저가 좋아요 트윗을 파악
 let REF_TWEET_LIKES = DB_REF.child("tweet-likes") // 트윗 잊장에서 누가 좋아요 눌렀는지 파악
+
+// notifications
+let REF_NOTIFICATIONS = DB_REF.child("notifications")

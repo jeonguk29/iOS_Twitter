@@ -163,6 +163,11 @@ extension FeedController: TweetCellDelegate {
             cell.tweet?.likes = likes // 이코드 실행시 Cell의 didSet이 수행됨
             //트윗을 설정하든, 트윗안에 사용자를 재설정하든, 트윗의 좋아요 수를 재설정하든, didSet이 호출되는 것임
             //그런다음 configure()이 호출 되고 뷰모델러 트윗을 넘겨준 다음 화면에 정상적인 값을 표시할 수 있음
+            
+            // 트윗이 좋아요인 경우에만 업로드 알림
+            guard cell.tweet?.didLike == true else { return }
+            NotificationService.shared.uploadNotification(type: .like, tweet: cell.tweet)
+            
         }
         
     }

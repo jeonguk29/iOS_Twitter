@@ -181,6 +181,9 @@ extension ProfileController: ProfileHeaderDelegate {
                 // UI 변경 팔로우에 따른
                 //header.editProfileFollowButton.setTitle("Following", for: .normal)
                 self.collectionView.reloadData()
+                
+                // 누군가를 팔로우하기 시작하면 알림을 보내야 합니다.
+                NotificationService.shared.uploadNotification(type: .follow, user: self.user)
             }
         }
 

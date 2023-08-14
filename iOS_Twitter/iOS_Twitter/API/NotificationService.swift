@@ -14,7 +14,7 @@ struct NotificationService {
     static let shared = NotificationService()
     
     // 알림 유형을 전달 할것임
-    func uploadNotification(type: NotificationType, tweet: Tweet? = nil) {
+    func uploadNotification(type: NotificationType, tweet: Tweet? = nil, user: User? = nil) {
         print("DEBUG: Type: is \(type)")
         
         guard let uid = Auth.auth().currentUser?.uid else { return }
@@ -32,8 +32,11 @@ struct NotificationService {
             // 해당 사용자(우기)로 이동하여 해당 사용자에 대한 구조(알림 구조)를 만들고 자식 값을 업데이트합니다.
             // 자식 값 : 시간, 좋아요 누른 트윗 id, 알림 타입(좋아요, 팔로우), 누른 사용자의 uid
         }
-        else {
-
+        else if let user = user { // 팔로우를 알람을 처리, 이때는 트윗id를 전달하지 않음
+                 REF_NOTIFICATIONS
+                     .child(user.uid)
+                     .childByAutoId()
+                     .updateChildValues(values)
         }
 
 

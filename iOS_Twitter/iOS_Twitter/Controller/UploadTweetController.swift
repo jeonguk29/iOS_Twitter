@@ -92,6 +92,11 @@ class UploadTweetController: UIViewController {
                 return
             }
             
+            // 답장 알림 전송
+            if case .reply(let tweet) = self.config {
+                         NotificationService.shared.uploadNotification(type: .reply, tweet: tweet)
+            }
+            
             self.dismiss(animated: true, completion: nil)
         }
     }

@@ -233,7 +233,11 @@ class TweetHeader: UICollectionReusableView {
             profileImageView.sd_setImage(with: viewModel.profileImageUrl)
             dateLabel.text = viewModel.headerTimestamp
             retweetsLabel.attributedText = viewModel.retweetsAttributedString
+        
+            // 좋아요 누른 트윗 눌렀을때 헤더에 좋아요 버튼 표시
             likesLabel.attributedText = viewModel.likesAttributedString
+            likeButton.setImage(viewModel.likeButtonImage, for: .normal)
+            likeButton.tintColor = viewModel.likeButtonTintColor
         }
     
     // 4가지 버튼을 편하게 만들기 위한 함수

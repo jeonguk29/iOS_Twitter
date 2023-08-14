@@ -47,7 +47,7 @@ class MainTabController: UITabBarController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-  //      logUserOut()
+        //logUserOut()
         view.backgroundColor = .twitterBlue // 앱 로드시 검정화면 파란색으로 맞춰주기 위함
         authenticateUserAndConfigureUI()
       

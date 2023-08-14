@@ -128,7 +128,7 @@ class MainTabController: UITabBarController {
         let nav2 = templeteNavigationController(image: UIImage(named: "search_unselected"), rootViewController: explore)
         
         let notifications = NotificationsController()
-        let nav3 = templeteNavigationController(image: UIImage(named: "home_unselected"), rootViewController: notifications)
+        let nav3 = templeteNavigationController(image: UIImage(named: "like_unselected"), rootViewController: notifications)
         
         
         let conversations = ConversationsController()

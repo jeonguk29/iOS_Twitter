@@ -12,14 +12,26 @@ private let reuseIdentifier = "NotificationCell"
 class NotificationsController: UITableViewController {
 
     // MARK: - Properties
-    private var notifications = [Notification]() // 알림 배열 만들기 : 현재 사용자가 받은 알림들을 담기위한
+    private var notifications = [Notification]() {
+           didSet {
+               tableView.reloadData()
+           }
+    } // 알림 배열 만들기 : 현재 사용자가 받은 알림들을 담기위한
 
     // MARK: - Lifecycle
        
        override func viewDidLoad() {
            super.viewDidLoad()
            configureUI()
+           fetchNotifications()
        }
+    
+    // MARK: - API
+      func fetchNotifications() {
+          NotificationService.shared.fetchNotifications { (notifications) in
+              self.notifications = notifications
+          }
+      }
        
        // MARK: - Helpers
 
@@ -29,14 +41,14 @@ class NotificationsController: UITableViewController {
 
            tableView.register(NotificationCell.self, forCellReuseIdentifier: reuseIdentifier) // 셀 등록
            tableView.rowHeight = 60 // 셀 높이 설정
-           tableView.separatorStyle = .none // 셀 구분선 없애기 
+           tableView.separatorStyle = .none // 셀 구분선 없애기
        }
 
    }
 
    extension NotificationsController {
        override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-           return 10 // notifications.count
+           return notifications.count
        }
 
        override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

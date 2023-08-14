@@ -11,6 +11,10 @@ import UIKit
 class NotificationCell: UITableViewCell {
 
     // MARK: - Properties
+    var notification: Notification? {
+        didSet {configure()}
+    }
+    
     private lazy var profileImageView: UIImageView = {
        let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
@@ -56,5 +60,17 @@ class NotificationCell: UITableViewCell {
     // MARK: - Selector
     @objc func handleProfileImageTapped() {
 
+    }
+    
+    
+    // MARK: - Helpers
+    func configure() {
+        // 알림이 들어온 순간 실행 되며 viewModel에서 동적값을 전달 받아 적용함
+        guard let notification = notification else { return }
+        
+        let viewModel = NotificationViewModel(notification: notification)
+        
+        profileImageView.sd_setImage(with: viewModel.profileImageURL)
+        notificationLabel.attributedText = viewModel.notificationText
     }
 }

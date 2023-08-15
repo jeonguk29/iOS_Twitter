@@ -32,19 +32,30 @@ class NotificationsController: UITableViewController {
         navigationController?.navigationBar.barStyle = .default
     }
     
+    // MARK: - Selectors
+        @objc func handleRefresh() {
+            print("DEBUG: 새로 고침")
+            fetchNotifications()
+        }
+    
     // MARK: - API
     func fetchNotifications() {
+        refreshControl?.beginRefreshing() // 새로 고침 제어
         NotificationService.shared.fetchNotifications { (notifications) in
+            self.refreshControl?.endRefreshing()
             self.notifications = notifications
-            
-            // 사용자를 팔로우 하는지 판단하는 함수 
-            for (index, notification) in notifications.enumerated() {
-                if case .follow = notification.type {
-                    let user = notification.user
-                    
-                    UserService.shared.checkIfUserIsFollowd(uid: user.uid) { isFollowed in
-                        self.notifications[index].user.isFollowed = isFollowed
-                    }
+            self.checkIfUserIsFollowed(notifications: notifications)
+        }
+    }
+    
+    // 사용자를 팔로우 하는지 판단하는 함수 : 리팩토링
+    func checkIfUserIsFollowed(notifications: [Notification]) {
+        for (index, notification) in notifications.enumerated() {
+            if case .follow = notification.type {
+                let user = notification.user
+                
+                UserService.shared.checkIfUserIsFollowd(uid: user.uid) { isFollowed in
+                    self.notifications[index].user.isFollowed = isFollowed
                 }
             }
         }
@@ -59,6 +70,10 @@ class NotificationsController: UITableViewController {
         tableView.register(NotificationCell.self, forCellReuseIdentifier: reuseIdentifier) // 셀 등록
         tableView.rowHeight = 60 // 셀 높이 설정
         tableView.separatorStyle = .none // 셀 구분선 없애기
+        
+        let refreshControl = UIRefreshControl() // 위로 화면 스크롤시 새로고침 가능하게 만들기
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
     }
     
 }
@@ -114,7 +129,23 @@ extension NotificationsController: NotificationCellDelegate {
         navigationController?.pushViewController(controller, animated: true)
     }
     
+    // 팔로우 버튼 클릭시
     func didTapFollow(_ cell: NotificationCell) {
-        print()
+        guard let user = cell.notification?.user else { return }
+        
+        print("DEBUG: User is followed \(user.isFollowed)")
+        
+        if user.isFollowed {
+            // 팔로우 하는 경우 팔로우를 해제
+            UserService.shared.unfollowUser(uid: user.uid) { (error, red) in
+                cell.notification?.user.isFollowed = false
+            }
+        }
+        else {
+            // 팔로우하지 않는 경우 팔로우
+            UserService.shared.followUser(uid: user.uid) { (error, red) in
+                cell.notification?.user.isFollowed = true
+            }
+        }
     }
 }

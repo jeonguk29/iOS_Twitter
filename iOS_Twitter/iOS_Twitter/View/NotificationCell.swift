@@ -12,6 +12,7 @@ import SDWebImage
 // 셀에서 컨트롤러로 작업을 위임하는 프로토콜 구현
 protocol NotificationCellDelegate: class {
     func didTapProfileImage(_ cell: NotificationCell) // 사용자 프로필로 이동
+    func didTapFollow(_ cell: NotificationCell) // 팔로우 이벤트 처리
 }
 
 // 알림 셀 구현 
@@ -39,6 +40,19 @@ class NotificationCell: UITableViewCell {
         return iv
     }()
     
+    private lazy var followButton: UIButton = {
+            let button = UIButton(type: .system)
+            button.setDimensions(width: 92, height: 32)
+            button.layer.cornerRadius = 32 / 2
+            button.setTitle("Loading", for: .normal)
+            button.setTitleColor(.twitterBlue, for: .normal)
+            button.backgroundColor = .white
+            button.layer.borderColor = UIColor.twitterBlue.cgColor
+            button.layer.borderWidth = 2
+            button.addTarget(self, action: #selector(handleFollowButtonTapped), for: .touchUpInside)
+
+            return button
+        }()
 
     let notificationLabel: UILabel = {
         let label = UILabel()
@@ -60,6 +74,11 @@ class NotificationCell: UITableViewCell {
         contentView.addSubview(stack) // 바뀐 부분
         stack.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 12)
         stack.anchor(right: rightAnchor, paddingRight: 12)
+        
+        
+        addSubview(followButton)
+        followButton.centerY(inView: self)
+        followButton.anchor(right: rightAnchor, paddingRight: 12)
             
     }
 
@@ -73,6 +92,10 @@ class NotificationCell: UITableViewCell {
         delegate?.didTapProfileImage(self)
     }
     
+    @objc func handleFollowButtonTapped() {
+          delegate?.didTapFollow(self)
+      }
+    
     
     // MARK: - Helpers
     func configure() {
@@ -83,5 +106,8 @@ class NotificationCell: UITableViewCell {
         
         profileImageView.sd_setImage(with: viewModel.profileImageURL)
         notificationLabel.attributedText = viewModel.notificationText
+        
+        followButton.isHidden = viewModel.shouldHideFollowButton
+        followButton.setTitle(viewModel.followButtonText, for: .normal)
     }
 }

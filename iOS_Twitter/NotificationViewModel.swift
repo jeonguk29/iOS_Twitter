@@ -52,6 +52,14 @@ struct NotificationViewModel {
     var profileImageURL: URL? {
         return user.profileImageUrl
     }
+    
+    var shouldHideFollowButton: Bool {
+        return type != .follow // 알림 유형이 팔로우와 같이 않으면 해당 팔로우 버튼 숨기기
+    }
+    
+    var followButtonText: String { // 알림 유형이 팔로우와 같을때는 값(팔로우 했는지 안했는지)에 따라 다르게 표시
+        return user.isFollowed ? "Following" : "Follow"
+    }
 
     init(notification: Notification) { // 초기화시 알림을 받음
         self.notification = notification

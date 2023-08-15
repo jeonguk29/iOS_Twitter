@@ -36,6 +36,17 @@ class NotificationsController: UITableViewController {
     func fetchNotifications() {
         NotificationService.shared.fetchNotifications { (notifications) in
             self.notifications = notifications
+            
+            // 사용자를 팔로우 하는지 판단하는 함수 
+            for (index, notification) in notifications.enumerated() {
+                if case .follow = notification.type {
+                    let user = notification.user
+                    
+                    UserService.shared.checkIfUserIsFollowd(uid: user.uid) { isFollowed in
+                        self.notifications[index].user.isFollowed = isFollowed
+                    }
+                }
+            }
         }
     }
     
@@ -97,10 +108,13 @@ extension NotificationsController: NotificationCellDelegate {
     // 셀에서 알림과 연결된 사용자 가져오기 : 프로필 이미지 클릭시
     func didTapProfileImage(_ cell: NotificationCell) {
         // 셀에 사용자 정보가 있기 때문에 가능
-        print("Profile image tapped!")
         guard let user = cell.notification?.user else { return }
 
         let controller = ProfileController(user: user)
         navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func didTapFollow(_ cell: NotificationCell) {
+        print()
     }
 }

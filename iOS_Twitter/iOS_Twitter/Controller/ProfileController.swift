@@ -17,10 +17,23 @@ class ProfileController: UICollectionViewController {
     
     private var user: User
     
-    private var tweets = [Tweet]() {
-        didSet {collectionView.reloadData()}
+    // 기본값을 .tweets로 지정해서 프로필 클릭시 Tweets이 첫화면임
+    private var selectedFilter: ProfileFilterOptions = .tweets {
+          didSet { collectionView.reloadData() }
     }
     
+    private var tweets = [Tweet]()
+    private var replies = [Tweet]()
+    private var likedTweets = [Tweet]()
+
+    // 프로필 화면에서 필터에따른 트윗을 보여주기 위해
+    private var currentDataSource: [Tweet] {
+        switch selectedFilter {
+        case .tweets: return tweets
+        case .replies: return replies
+        case .likes: return likedTweets
+        }
+    }
     
     // MARK: - Lifecycle
     
@@ -59,6 +72,7 @@ class ProfileController: UICollectionViewController {
         // FeedController에서 선택한 트윗셀의 user 정보를 전달 받기 때문에 바로 넘길 수 있음
         TweetService.shared.fatchTweets(forUser: user) { tweets in
             self.tweets = tweets
+            self.collectionView.reloadData()
         }
     }
     
@@ -101,15 +115,16 @@ class ProfileController: UICollectionViewController {
 // MARK: - UICollectionViewDataSource
 
 extension ProfileController {
+    //  프로필 헤더 대리자에는 어떤 필터가 선택되었는지 알려주는 함수가 필요합니다.
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return tweets.count
+        return currentDataSource.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TweetCell
         
-        cell.tweet = tweets[indexPath.row]
+        cell.tweet = currentDataSource[indexPath.row]
         return cell
     }
 }
@@ -184,6 +199,7 @@ extension ProfileController: ProfileHeaderDelegate {
                 
                 // 누군가를 팔로우하기 시작하면 알림을 보내야 합니다.
                 NotificationService.shared.uploadNotification(type: .follow, user: self.user)
+                 
             }
         }
 

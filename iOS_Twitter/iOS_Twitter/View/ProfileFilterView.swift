@@ -30,11 +30,19 @@ class ProfileFilterView: UIView {
         return cv
     }()
     
+    private let underlineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .twitterBlue
+        return view
+    }()
+    
+    
     // MARK: - Lifecycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        print("DEBUG: Did init..")
+        print("DEBUG: Frame in init is \(frame.width)")
         collectionView.register(ProfileFilterCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
         let selectedIndexPath = IndexPath(row: 0, section: 0)
@@ -43,6 +51,19 @@ class ProfileFilterView: UIView {
         addSubview(collectionView)
         collectionView.addConstraintsToFillView(self)
     }
+    
+    
+    override func layoutSubviews() {
+        print("DEBUG: Did layout subViews..")
+        print("DEBUG: Frame in init is \(frame.width)")
+           addSubview(underlineView)
+                // 3등분으로 나눠 각 필터 선택시 크기가 맞게 설정
+                underlineView.anchor(left: leftAnchor, bottom: bottomAnchor, width: frame.width / 3, height: 2)
+        
+//           let count = CGFloat(ProfileFilterOptions.allCases.count)
+//           underlineView.anchor(left: leftAnchor, bottom: bottomAnchor, width: frame.width / count, height: 2)
+       }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -76,9 +97,18 @@ extension ProfileFilterView: UICollectionViewDelegate {
     
     // 각 아이템을 선택할때마다 호출 되는 함수임
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    
+        let cell = collectionView.cellForItem(at: indexPath)
+        
+        // 해당 셀의 x 위치를 가져온 다음 밑줄이 그어진 보기를 해당 x 위치로 애니메이션화하는 것입니다.
+        let xPosition = cell?.frame.origin.x ?? 0
+        UIView.animate(withDuration: 0.3) {
+            self.underlineView.frame.origin.x = xPosition
+        }
         delegate?.filterView(self, didSelect: indexPath) // 이제 우리는 이 프로토콜을 준수해야 하며 프로필 헤더 내부에서 그렇게 할 것임
         
     }
+    
 }
 
 

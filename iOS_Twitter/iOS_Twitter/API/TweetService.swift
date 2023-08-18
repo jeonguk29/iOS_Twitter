@@ -36,9 +36,15 @@ struct TweetService {
         case .reply(let tweet):
             // 답글일때는 기준 트윗 아이디 밑에 답글 트윗 을 생성
             REF_TWEET_REPLIES.child(tweet.tweetID).childByAutoId()
-                .updateChildValues(values, withCompletionBlock: completion)
+                .updateChildValues(values) { (err, ref) in
+                    guard let replyKey = ref.key else { return }
+                    // 사용자가 답글을 단 트윗을 저장하기 위함
+                    // 트윗 남길때 현제 사용자 uid를 id 값으로 하위 구조는 상대방 트윗 id가 키 : 그의 대한 값으로 답글 남긴 트윗 id를 전달
+                    REF_USER_REPLIES.child(uid).updateChildValues([tweet.tweetID: replyKey],
+                                                                  withCompletionBlock: completion)
+                }
+            
         }
-        
     }
     
     // 트윗 가져오는 메서드 만들기
@@ -106,6 +112,31 @@ struct TweetService {
             }
         }
     }
+    
+    // 사용자 프로필에서 사용자가 답글 남긴  누른 트윗을 가져오기
+    func fetchReplies(forUser user: User, completion: @escaping([Tweet]) -> Void) {
+          var replies = [Tweet]()
+
+          REF_USER_REPLIES.child(user.uid).observe(.childAdded) { snapshot in
+              let tweetID = snapshot.key
+              guard let replyID = snapshot.value as? String else { return }
+
+              print("DEBUG: Tweet key is \(tweetID)")
+              print("DEBUG: Reply key is \(replyID)")
+              
+              REF_TWEET_REPLIES.child(tweetID).child(replyID).observeSingleEvent(of: .value) { snapshot in
+                  guard let dictionary = snapshot.value as? [String: Any] else { return }
+                  guard let uid = dictionary["uid"] as? String else { return }
+
+                  UserService.shared.fetchUser(uid: uid) { user in
+                      let tweet = Tweet(user: user, tweetID: tweetID, dictionary: dictionary)
+                      replies.append(tweet)
+                      completion(replies)
+                  }
+              }
+          }
+
+      }
     
     func fetchReplies(forTweet tweet: Tweet, completion: @escaping([Tweet]) -> Void) {
           var tweets = [Tweet]()

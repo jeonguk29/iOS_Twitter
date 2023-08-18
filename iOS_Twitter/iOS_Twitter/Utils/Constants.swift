@@ -28,3 +28,6 @@ let REF_TWEET_LIKES = DB_REF.child("tweet-likes") // 트윗 잊장에서 누가 
 
 // notifications
 let REF_NOTIFICATIONS = DB_REF.child("notifications")
+
+// tweet replies : 프로필에서 답글 남긴 트윗을 보여주기 위함 
+let REF_USER_REPLIES = DB_REF.child("user-replies")

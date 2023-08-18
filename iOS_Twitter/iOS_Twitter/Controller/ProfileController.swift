@@ -57,6 +57,7 @@ class ProfileController: UICollectionViewController {
         checkIfUserIsFollowed()
         fetchUserStats()
         fetchLikedTweets()
+        fetchReplies()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,12 +77,21 @@ class ProfileController: UICollectionViewController {
         }
     }
     
+    // 좋아요 누른 트윗 가져오가
     func fetchLikedTweets() {
            TweetService.shared.fetchLikes(forUser: user) { tweets in
                self.likedTweets = tweets
                // selectedFilter 의 Didset 작동해서 화면 리로드 가능함 
            }
        }
+    
+    // 답장 트윗 가져오기
+    func fetchReplies() {
+        TweetService.shared.fetchReplies(forUser: user) { tweets in
+            self.replies = tweets
+        }
+    }
+    
     
     func checkIfUserIsFollowed(){
         UserService.shared.checkIfUserIsFollowd(uid: user.uid) { isFollowed in

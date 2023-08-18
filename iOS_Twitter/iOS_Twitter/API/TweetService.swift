@@ -18,7 +18,7 @@ struct TweetService {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         // 누가 트윗을 남겼는지 uid를 저장해줘야함
         
-        let values = ["uid": uid, "timestamp" : Int(NSDate().timeIntervalSince1970),
+        var values = ["uid": uid, "timestamp" : Int(NSDate().timeIntervalSince1970),
                       "likes" : 0, "retweets": 0, "caption": caption] as [String : Any]
         
         // 파이어 베이스에 답장 업로드하기
@@ -34,6 +34,7 @@ struct TweetService {
                 // 이런것을 팬 아웃이라고 하며 : 서버 작업이 훨씬 줄어듬
             }
         case .reply(let tweet):
+            values["replyingTo"] = tweet.user.username // 누구에게 답글 남기는지 이름 값을 추가 
             // 답글일때는 기준 트윗 아이디 밑에 답글 트윗 을 생성
             REF_TWEET_REPLIES.child(tweet.tweetID).childByAutoId()
                 .updateChildValues(values) { (err, ref) in

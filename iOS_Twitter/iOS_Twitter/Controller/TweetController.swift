@@ -43,9 +43,18 @@ class TweetController: UICollectionViewController {
         //        print("DEBUG: Tweet caption is \(tweet.caption)")
     }
     
+    // 프로필에서 트윗 누를때 네비게이션 올라오게 구현
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.navigationBar.isHidden = false
+    }
+    
     // MARK: - API
     
     func fetchReplies() {
+        print("DEBUG: Tweet ID is \(tweet.tweetID)")
+        
         TweetService.shared.fetchReplies(forTweet: tweet) { replies in
             self.replies = replies // 답글 트윗 배열 받기
         }

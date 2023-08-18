@@ -87,6 +87,15 @@ class TweetHeader: UICollectionReusableView {
     // MARK: - 리트윗, 좋아요 하위 뷰 만들기
     private lazy var retweetsLabel =  UILabel()
     
+    
+    // 답글 라벨
+    private let replyLabel: UILabel = {
+           let label = UILabel()
+           label.textColor = .lightGray
+           label.font = UIFont.systemFont(ofSize: 12)
+           return label
+       }()
+    
     private lazy var likesLabel =  UILabel()
     
     private lazy var statsView: UIView = {
@@ -156,8 +165,13 @@ class TweetHeader: UICollectionReusableView {
         labelStack.axis = .vertical // 세로
         labelStack.spacing = -6
         
-        let stack = UIStackView(arrangedSubviews: [profileImageView, labelStack])
-        stack.spacing = 12
+        let imageCaptionStack = UIStackView(arrangedSubviews: [profileImageView, labelStack])
+        imageCaptionStack.spacing = 12
+        
+        let stack = UIStackView(arrangedSubviews: [replyLabel, imageCaptionStack])
+        stack.axis = .vertical
+        stack.spacing = 8
+        stack.distribution = .fillProportionally
         
         addSubview(stack) // 기본 수평
         stack.anchor(top: topAnchor, left: leftAnchor, paddingTop: 16, paddingLeft: 16)
@@ -221,24 +235,28 @@ class TweetHeader: UICollectionReusableView {
     
     // MARK: - Helpers
     
-    // 실제 트윗 정보가 넘어오면 실행할 부분 뷰 모델에서 동적 데이터 받아오기 
+    // 실제 트윗 정보가 넘어오면 실행할 부분 뷰 모델에서 동적 데이터 받아오기
     func configure() {
-            guard let tweet = tweet else { return }
-
-            let viewModel = TweetViewModel(tweet: tweet)
-
-            captionLabel.text = tweet.caption
-            fullnameLabel.text = tweet.user.fullname
-            usernameLabel.text = viewModel.usernameText
-            profileImageView.sd_setImage(with: viewModel.profileImageUrl)
-            dateLabel.text = viewModel.headerTimestamp
-            retweetsLabel.attributedText = viewModel.retweetsAttributedString
+        guard let tweet = tweet else { return }
         
-            // 좋아요 누른 트윗 눌렀을때 헤더에 좋아요 버튼 표시
-            likesLabel.attributedText = viewModel.likesAttributedString
-            likeButton.setImage(viewModel.likeButtonImage, for: .normal)
-            likeButton.tintColor = viewModel.likeButtonTintColor
-        }
+        let viewModel = TweetViewModel(tweet: tweet)
+        
+        captionLabel.text = tweet.caption
+        fullnameLabel.text = tweet.user.fullname
+        usernameLabel.text = viewModel.usernameText
+        profileImageView.sd_setImage(with: viewModel.profileImageUrl)
+        dateLabel.text = viewModel.headerTimestamp
+        retweetsLabel.attributedText = viewModel.retweetsAttributedString
+        
+        // 좋아요 누른 트윗 눌렀을때 헤더에 좋아요 버튼 표시
+        likesLabel.attributedText = viewModel.likesAttributedString
+        likeButton.setImage(viewModel.likeButtonImage, for: .normal)
+        likeButton.tintColor = viewModel.likeButtonTintColor
+        
+        // 뷰모델에서 동적 처리에 따른 답글 라벨 표시
+        replyLabel.isHidden = viewModel.shouldHideReplyLabel
+        replyLabel.text = viewModel.replyText
+    }
     
     // 4가지 버튼을 편하게 만들기 위한 함수
     func createButton(withImageName imageName: String) -> UIButton {

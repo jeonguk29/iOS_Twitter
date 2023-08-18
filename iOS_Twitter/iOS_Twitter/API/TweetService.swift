@@ -128,10 +128,11 @@ struct TweetService {
               REF_TWEET_REPLIES.child(tweetID).child(replyID).observeSingleEvent(of: .value) { snapshot in
                   guard let dictionary = snapshot.value as? [String: Any] else { return }
                   guard let uid = dictionary["uid"] as? String else { return }
-
+                  let replyID = snapshot.key // 기존에 원래 트윗 ID를 제공하는 것을 답글 ID로 제공하는 것으로 수정
+                  // 내가 남긴 답글 트윗으로 바로 이동가능하게
                   UserService.shared.fetchUser(uid: uid) { user in
-                      let tweet = Tweet(user: user, tweetID: tweetID, dictionary: dictionary)
-                      replies.append(tweet)
+                      let reply = Tweet(user: user, tweetID: replyID, dictionary: dictionary)
+                      replies.append(reply)
                       completion(replies)
                   }
               }

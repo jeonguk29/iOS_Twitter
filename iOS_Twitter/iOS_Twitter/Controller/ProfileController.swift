@@ -166,6 +166,13 @@ extension ProfileController {
         
         return header
     }
+    
+    // 프로필에서 셀 누를때 메인과 동일하게 트윗으로 이동
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+         let tweet = currentDataSource[indexPath.row]
+         let controller = TweetController(tweet: tweet)
+         navigationController?.pushViewController(controller, animated: true)
+     }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -184,7 +191,7 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
         let tweet = currentDataSource[indexPath.row]
         let viewModel = TweetViewModel(tweet: tweet)
         
-        // 답글이면 높이를 좀더 크게해서 간격을 일정하게 수정 
+        // 답글이면 높이를 좀더 크게해서 간격을 일정하게 수정
         var height = viewModel.size(forWidth: view.frame.width).height + 72
         
         if currentDataSource[indexPath.row].isReply {

@@ -164,6 +164,11 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - ProfileHeaderDelegate
 extension ProfileController: ProfileHeaderDelegate {
+    func didSelect(filter: ProfileFilterOptions) {
+        print("DEBUG: Did select filter \(filter.description) in profile controller..")
+        self.selectedFilter = filter
+    }
+    
     
     // 커스텀 델리게이트로 팔로우 처리해주기 
     func handleEditProfileFollow(_ header: ProfileHeader) {

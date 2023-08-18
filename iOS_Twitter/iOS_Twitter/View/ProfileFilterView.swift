@@ -11,7 +11,7 @@ import UIKit
 private let reuseIdentifier = "ProfileFilterCell"
 
 protocol ProfileFilterViewDelegate: class {
-    func filterView(_ view: ProfileFilterView, didSelect indexPath: IndexPath)
+    func filterView(_ view: ProfileFilterView, didSelect indexPath: Int)
 }
 
 class ProfileFilterView: UIView {
@@ -105,7 +105,9 @@ extension ProfileFilterView: UICollectionViewDelegate {
         UIView.animate(withDuration: 0.3) {
             self.underlineView.frame.origin.x = xPosition
         }
-        delegate?.filterView(self, didSelect: indexPath) // 이제 우리는 이 프로토콜을 준수해야 하며 프로필 헤더 내부에서 그렇게 할 것임
+        
+        print("DEBUG: Delegate action to profile header from filter bar..")
+        delegate?.filterView(self, didSelect: indexPath.row) // 이제 우리는 이 프로토콜을 준수해야 하며 프로필 헤더 내부에서 그렇게 할 것임
         
     }
     

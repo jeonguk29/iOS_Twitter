@@ -10,6 +10,8 @@ import UIKit
 protocol ProfileHeaderDelegate: class {
     func handleDismissal()
     func handleEditProfileFollow(_ header: ProfileHeader) // 팔로우를 처리할 프로토콜 메서드 만들기
+    func didSelect(filter: ProfileFilterOptions) // 프로필 필터가 옵션이 될 수 있는 선택이 될 것입니다.
+    // 리팩토링 이후 하위 보기, 즉 필터 표시줄에서 헤더로 작업을 다시 위임합니다.그런 다음 해당 작업을 헤더에서 컨트롤러로 다시 위임해야 합니다.
 }
 
 // 컬렉션뷰의 재사용 가능한 뷰로 만듬
@@ -220,7 +222,10 @@ class ProfileHeader: UICollectionReusableView {
 // MARK: - ProfileFilterViewDelegate
 
 extension ProfileHeader: ProfileFilterViewDelegate {
-    func filterView(_ view: ProfileFilterView, didSelect indexPath: IndexPath) {
-
+    func filterView(_ view: ProfileFilterView, didSelect index: Int) {
+        guard let filter = ProfileFilterOptions(rawValue: index) else { return }
+        
+        print("DEBUG: delegate action from header to controller with filter \(filter.description)")
+        delegate?.didSelect(filter: filter)
     }
 }

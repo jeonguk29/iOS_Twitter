@@ -10,6 +10,9 @@ import UIKit
 // 뷰 모델은 모델 즉 TweetCell의 부담을 덜어주는 용도로 사용하는 것임
 // ex 계산속성 같은 몇분전 트윗인지 등등
 struct TweetViewModel {
+    
+    
+    // MARK: - Properties
     let tweet: Tweet
     let user: User
     
@@ -72,6 +75,18 @@ struct TweetViewModel {
         return UIImage(named: imageName)! // we know these images exist
     }
     
+    // 답글인지 여부에 따라 답글 라벨을 표시 
+    var shouldHideReplyLabel: Bool {
+         return !tweet.isReply
+     }
+
+     var replyText: String? {
+         guard let replyingToUsername = tweet.replyingTo else { return nil }
+         return "→ replying to @\(replyingToUsername)"
+     }
+    
+    // MARK: - Lifecycle
+    
     init(tweet: Tweet) {
         self.tweet = tweet
         self.user = tweet.user
@@ -85,6 +100,9 @@ struct TweetViewModel {
                                                                                    NSAttributedString.Key.foregroundColor : UIColor.lightGray]))
         return attributedTitle
     }
+    
+    
+    // MARK: - Helpers
     
     //동적 셀 크기 조정
     func size(forWidth width: CGFloat) -> CGSize {

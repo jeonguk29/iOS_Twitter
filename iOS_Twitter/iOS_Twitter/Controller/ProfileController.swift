@@ -90,9 +90,9 @@ class ProfileController: UICollectionViewController {
         TweetService.shared.fetchReplies(forUser: user) { tweets in
             self.replies = tweets
             
-            self.replies.forEach { reply in
-                print("DEBUG: Replying to \(reply.replyingTo)")
-            }
+//            self.replies.forEach { reply in
+//                print("DEBUG: Replying to \(reply.replyingTo)")
+//            }
         }
     }
     
@@ -181,10 +181,17 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
     
     // 각 셀의 크기를 지정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            let tweet = currentDataSource[indexPath.row]
-            let viewModel = TweetViewModel(tweet: tweet)
-            let height = viewModel.size(forWidth: view.frame.width).height
-            return CGSize(width: view.frame.width, height: height + 72)
+        let tweet = currentDataSource[indexPath.row]
+        let viewModel = TweetViewModel(tweet: tweet)
+        
+        // 답글이면 높이를 좀더 크게해서 간격을 일정하게 수정 
+        var height = viewModel.size(forWidth: view.frame.width).height + 72
+        
+        if currentDataSource[indexPath.row].isReply {
+            height += 20
+        }
+        
+        return CGSize(width: view.frame.width, height: height)
     }
 }
 

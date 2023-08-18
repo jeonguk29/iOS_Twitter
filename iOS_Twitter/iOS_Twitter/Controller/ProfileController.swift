@@ -56,7 +56,7 @@ class ProfileController: UICollectionViewController {
         print("DEBUG: User is \(user.username)")
         checkIfUserIsFollowed()
         fetchUserStats()
-        
+        fetchLikedTweets()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,6 +75,13 @@ class ProfileController: UICollectionViewController {
             self.collectionView.reloadData()
         }
     }
+    
+    func fetchLikedTweets() {
+           TweetService.shared.fetchLikes(forUser: user) { tweets in
+               self.likedTweets = tweets
+               // selectedFilter 의 Didset 작동해서 화면 리로드 가능함 
+           }
+       }
     
     func checkIfUserIsFollowed(){
         UserService.shared.checkIfUserIsFollowd(uid: user.uid) { isFollowed in
@@ -106,7 +113,10 @@ class ProfileController: UICollectionViewController {
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: headerIdentifier)
         
-     
+        
+        // 헤더에서 보여지는 트윗 많을때 스크롤 가능하게 높이를 조정
+        guard let tabHeight = tabBarController?.tabBar.frame.height else {return}
+        collectionView.contentInset.bottom = tabHeight
     }
 }
 
@@ -157,7 +167,10 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
     
     // 각 셀의 크기를 지정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 120)
+            let tweet = currentDataSource[indexPath.row]
+            let viewModel = TweetViewModel(tweet: tweet)
+            let height = viewModel.size(forWidth: view.frame.width).height
+            return CGSize(width: view.frame.width, height: height + 72)
     }
 }
 

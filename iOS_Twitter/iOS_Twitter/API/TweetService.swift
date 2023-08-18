@@ -123,6 +123,24 @@ struct TweetService {
           }
       }
     
+    // 사용자 프로필에서 좋아요 누른 트윗을 가져오기 
+    func fetchLikes(forUser user: User, completion: @escaping([Tweet]) -> Void) {
+           var tweets = [Tweet]()
+
+           REF_USER_LIKES.child(user.uid).observe(.childAdded) { snapshot in
+               let tweetID = snapshot.key
+               self.fetchTweet(with: tweetID) { likedTweet in
+                   var tweet = likedTweet
+                   tweet.didLike = true // 프로필에서 좋아요누른 트윗 보여줄때 빨간 하트 활성화 
+
+                   tweets.append(tweet)
+                   completion(tweets)
+               }
+           }
+
+
+       }
+    
     func likeTweet(tweet: Tweet, completion: @escaping(DatabaseCompletion)) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         

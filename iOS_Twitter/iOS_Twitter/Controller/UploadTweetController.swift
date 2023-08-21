@@ -50,7 +50,7 @@ class UploadTweetController: UIViewController {
           return label
       }()
     
-    private let captionTextView = CaptionTextView() // 하위 클래스를 만들어 코드를 분리 시켰음 
+    private let captionTextView = InputTextView() // 하위 클래스를 만들어 코드를 분리 시켰음 
     
     // MARK: - Lifecycle
     

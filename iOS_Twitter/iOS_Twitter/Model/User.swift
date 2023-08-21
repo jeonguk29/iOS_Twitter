@@ -23,12 +23,17 @@ struct User {
     // 사용자가 현재 사용자인지 여부를 파악하기 위한 변수
     var isCurrentUser: Bool {return Auth.auth().currentUser?.uid == uid}
     
+    var bio: String? //  사용자가 자기를 표현하는 말을 저장하기 위한 변수 
+    
+    
     init(uid: String, dictionary: [String: AnyObject]){
         self.uid = uid
         
         self.fullname = dictionary["fullname"] as? String ?? ""
         self.email = dictionary["email"] as? String ?? ""
         self.username = dictionary["username"] as? String ?? ""
+        
+        self.bio = dictionary["bio"] as? String ?? ""
         
         if let profileImageUrlString = dictionary["profileImageUrl"] as? String {
             guard let url = URL(string: profileImageUrlString) else {return}

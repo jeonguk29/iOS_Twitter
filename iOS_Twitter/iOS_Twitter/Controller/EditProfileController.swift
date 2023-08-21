@@ -12,9 +12,13 @@ private let reuseIdentifier = "EditProfileCell"
 class EditProfileController: UITableViewController {
 
     // MARK: - Properties
-    private let user: User
+    private var user: User
     private lazy var headerView = EditProfileHeader(user: user)
-
+    private let imagePicker = UIImagePickerController()
+    private var selectedImage: UIImage? {
+        didSet { headerView.profileImageView.image = selectedImage }
+    }
+    
     // MARK: - Lifecycle
     init(user: User) {
         // 해당 컨트롤러는 사용자 정보로 채워져야함 초기화할때 사용자 정보 받는 부분이 필수 
@@ -28,7 +32,8 @@ class EditProfileController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        configureImagePicker()
         configureNavigationBar()
         configureTableView()
     }
@@ -79,6 +84,11 @@ class EditProfileController: UITableViewController {
         // 셀등록
         tableView.register(EditProfileCell.self, forCellReuseIdentifier: reuseIdentifier)
     }
+    
+    func configureImagePicker() {
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -89,7 +99,9 @@ extension EditProfileController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! EditProfileCell
-
+    
+        cell.delegate = self
+        
         guard let option = EditProfileOptions(rawValue: indexPath.row) else { return cell}
         cell.viewModel = EditProfileViewModel(user: user, option: option)
         
@@ -107,11 +119,53 @@ extension EditProfileController {
     }
 }
 
-// MARK: - UITableViewDataSource
-extension EditProfileController: EditProfileHeaderDelegate {
-    func didTapChangeProfilePhoto() {
 
+// MARK: - UIImagePickerControllerDelegate, UINavigationControllerDelegate
+extension EditProfileController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        // 사용자 프로필 이미지를 바꾸는 부분
+        guard let image = info[.editedImage] as? UIImage else { return }
+        self.selectedImage = image //DidSet의 의하여 헤더에 바로 적용 되는 걸 확인 할 수 있음 
+        
+        // 실제 사용자 정보를 업데이트 해주는 부분을 만들기만 하면 됨
+
+        dismiss(animated: true, completion: nil)
     }
 }
 
 
+// MARK: - EditProfileHeaderDelegate
+
+extension EditProfileController: EditProfileHeaderDelegate {
+    func didTapChangeProfilePhoto() {
+        present(imagePicker, animated: true, completion: nil)
+    }
+}
+
+// MARK: - EditProfileCellDelegate
+
+extension EditProfileController: EditProfileCellDelegate {
+    
+    // 실제 사용자 정보를 업데이트 해주는 부분
+    func updateUserInfo(_ cell: EditProfileCell) {
+        
+        guard let viewModel = cell.viewModel else { return }
+        
+        switch viewModel.option {
+            
+        case .fullname:
+            guard let fullname = cell.infoTextField.text else { return }
+            user.fullname = fullname
+        case .username:
+            guard let username = cell.infoTextField.text else { return }
+            user.username = username
+        case .bio:
+            user.bio = cell.bioTextView.text // 값 자체가 옵셔널이라 그냥 넣으면 됨
+        }
+        
+        print(user.fullname)
+        print(user.username)
+        print(user.bio)
+    }
+}

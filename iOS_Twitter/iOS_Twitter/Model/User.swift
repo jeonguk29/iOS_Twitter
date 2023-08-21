@@ -11,9 +11,9 @@ import FirebaseCore
 import FirebaseDatabase
 
 struct User {
-    let fullname: String
+    var fullname: String
     let email: String
-    let username: String
+    var username: String
     var profileImageUrl: URL?
     let uid: String
     var stats: UserRelationStats? // API 호출되면 이 속성을 설정할 것임 

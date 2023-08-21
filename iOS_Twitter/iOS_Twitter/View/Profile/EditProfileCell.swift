@@ -7,12 +7,19 @@
 
 import UIKit
 
+
+protocol EditProfileCellDelegate: class {
+    func updateUserInfo(_ cell: EditProfileCell) // 변경한 유저의 정보를 업데이트 하는 것을 위임하기 위함
+}
+
 class EditProfileCell: UITableViewCell {
 
     // MARK: - Properties
     var viewModel: EditProfileViewModel? {
         didSet { configure() }
     }
+    
+    weak var delegate: EditProfileCellDelegate?
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -68,6 +75,13 @@ class EditProfileCell: UITableViewCell {
                                   paddingTop: 4,
                                   paddingLeft: 16,
                                   paddingBottom: 8)
+        
+        
+        // 텍스트 보기에 대해 종료되었음을 관찰자에게 알려주는 것임 
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleUpdateUserInfo),
+                                               name: UITextView.textDidEndEditingNotification,
+                                               object: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -76,7 +90,7 @@ class EditProfileCell: UITableViewCell {
     
     // MARK: - Selectors
     @objc func handleUpdateUserInfo() {
-        
+        delegate?.updateUserInfo(self)
     }
     
     // MARK: - Helpers

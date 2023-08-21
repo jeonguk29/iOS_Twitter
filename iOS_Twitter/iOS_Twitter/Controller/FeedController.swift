@@ -54,7 +54,7 @@ class FeedController: UICollectionViewController{
             self.checkIfUserLikedTweets()
             // 날짜 순으로 트윗 정렬
             self.tweets = tweets.sorted(by: { $0.timestamp > $1.timestamp })
-            // 아래 코드를 축약 한 것임 
+            // 아래 코드를 축약 한 것임
             //            self.tweets = tweets.sorted(by: {(tweet1, tweet2) -> Bool in
             //                return tweet1.timestamp < tweet2.timestamp
             //            })
@@ -64,16 +64,19 @@ class FeedController: UICollectionViewController{
     
     func checkIfUserLikedTweets() {
         // 2. 실제 데이터베이스에 저장된 정보로 모든 트윗을 돌리면서 확인하고 화면에 적용하기 위한 작업
-            for (index, tweet) in tweets.enumerated() {
-                TweetService.shared.checkIfUserLikedTweet(tweet) { didLike in
-                    guard didLike == true else { return }
-
+        
+        // 현제 피드에서 언팔로우를 하고 다시 사용자 검색 화면에서 팔로우 눌렀을때 해당 좋아요 체크부분에서 오류가 나는 것을 해결
+        self.tweets.forEach { tweet in
+            TweetService.shared.checkIfUserLikedTweet(tweet) { didLike in
+                guard didLike == true else { return }
+                
+                // 두 인덱스 개수가 맞지 않아서 아래 코드를 작성한 것임
+                if let index = self.tweets.firstIndex(where: { $0.tweetID == tweet.tweetID }) {
                     self.tweets[index].didLike = true
-                    // 값이 수정되면  didSet {collectionView.reloadData()}가 호출되서 다시 컬렉션뷰를 리로드 => 좋아요 표시
                 }
             }
         }
-    
+    }
     // MARK: - Helpers
     
     func configureUI() {

@@ -216,9 +216,22 @@ extension ProfileController: ProfileHeaderDelegate {
 
         //print("DEBUG: User is followed is \(user.isFollowed) before button tap ")
         
-        if user.isCurrentUser { // 현제 사용자 자기 자신 프로필 클릭시 아무일도 일어나지 않게 그냥 return
-            // 팔로우 못하게 
-            print("DEBUG : Show edit profile controller..")
+        if user.isCurrentUser {
+            // 팔로우 못하게
+
+            let controller = EditProfileController(user: user)
+            let nav = UINavigationController(rootViewController: controller)
+
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .twitterBlue
+            nav.navigationBar.standardAppearance = appearance
+            nav.navigationBar.scrollEdgeAppearance = nav.navigationBar.standardAppearance
+            nav.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
+            
+            nav.modalPresentationStyle = .fullScreen
+            present(nav, animated: true, completion: nil)
             return
         }
         

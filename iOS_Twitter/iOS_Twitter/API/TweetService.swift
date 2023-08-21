@@ -52,21 +52,46 @@ struct TweetService {
     func fatchTweets(completion: @escaping([Tweet]) -> Void){
         var tweets = [Tweet]()
         
-        REF_TWEETS.observe(.childAdded) { snapshot in
-            print("DEBUG: Snapshot is \(snapshot.value)")
-            guard let dictionary = snapshot.value as? [String: Any] else {return}
-            guard let uid = dictionary["uid"] as? String else {return}
-            //트윗 내부에 사용자 uid를 저장했음, 해당 uid는 user테이블의 키와 값음 해당 값을 이용하여 사용자를 가져와 트윗 모델에 전달 할 것임
-            let tweetID = snapshot.key // 각 트윗의 키를 얻을 수 있음
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        
+        REF_USER_FOLLOWING.child(currentUid).observe(.childAdded) { snapshot in
+            print(snapshot) // Snap (BiZ3OJRTclSTljANKX9NOsVL8D92) 1 : 내가 팔로우한 사용자의 id를 통해 해당 사용자가 작성한 트윗을 보게 하려고함
+            let followingUid = snapshot.key
             
-            UserService.shared.fetchUser(uid: uid) { user in
-                let tweet = Tweet(user: user, tweetID: tweetID, dictionary: dictionary)
-                tweets.append(tweet)// 모든 트윗을 찾아 담고 반환
+            REF_USER_TWEETS.child(followingUid).observe(.childAdded) { snapshot in
+                print(snapshot)// 내 피드의 나와야할 트윗 id를 표시
+                let tweetID = snapshot.key
+                
+                self.fetchTweet(with: tweetID) { tweet in
+                    tweets.append(tweet)
+                    completion(tweets)
+                }
+            }
+        }
+        
+        REF_USER_TWEETS.child(currentUid).observe(.childAdded) { snapshot in
+            let tweetID = snapshot.key
+            
+            self.fetchTweet(with: tweetID) { tweet in
+                tweets.append(tweet)
                 completion(tweets)
             }
-            // 이제 각 트윗과 연결된 사용자가 있음
-            
         }
+        
+        //        REF_TWEETS.observe(.childAdded) { snapshot in
+        //            print("DEBUG: Snapshot is \(snapshot.value)")
+        //            guard let dictionary = snapshot.value as? [String: Any] else {return}
+        //            guard let uid = dictionary["uid"] as? String else {return}
+        //            //트윗 내부에 사용자 uid를 저장했음, 해당 uid는 user테이블의 키와 값음 해당 값을 이용하여 사용자를 가져와 트윗 모델에 전달 할 것임
+        //            let tweetID = snapshot.key // 각 트윗의 키를 얻을 수 있음
+        //
+        //            UserService.shared.fetchUser(uid: uid) { user in
+        //                let tweet = Tweet(user: user, tweetID: tweetID, dictionary: dictionary)
+        //                tweets.append(tweet)// 모든 트윗을 찾아 담고 반환
+        //                completion(tweets)
+        //            }
+        //            // 이제 각 트윗과 연결된 사용자가 있음
+        
     }
     
     // 사용자가 작성한 모든 트윗에 대한 변경 내역을 실시간으로 검색하는 데 사용됩니다.

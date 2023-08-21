@@ -41,12 +41,24 @@ class FeedController: UICollectionViewController{
         // 프로필보기 쪽에서 헤더를 보이지 않게 만들어서 돌아올때 설정 값이 남아있을수 있음 그래서 해당 속성을 추가
     }
     
+    // MARK: - Selectors
+    @objc func handleRefresh() {
+        fetchTweets()
+    }
     
     // MARK: - API
     func fetchTweets(){
+        collectionView.refreshControl?.beginRefreshing() // 새로고침 컨트롤러 추가
         TweetService.shared.fatchTweets { tweets in
             self.tweets = tweets
             self.checkIfUserLikedTweets()
+            // 날짜 순으로 트윗 정렬
+            self.tweets = tweets.sorted(by: { $0.timestamp > $1.timestamp })
+            // 아래 코드를 축약 한 것임 
+            //            self.tweets = tweets.sorted(by: {(tweet1, tweet2) -> Bool in
+            //                return tweet1.timestamp < tweet2.timestamp
+            //            })
+            self.collectionView.refreshControl?.endRefreshing()
         }
     }
     
@@ -75,6 +87,11 @@ class FeedController: UICollectionViewController{
         imageView.contentMode = .scaleAspectFit
         imageView.setDimensions(width: 44, height: 44)
         navigationItem.titleView = imageView
+        
+        // 피드 새로고침 가능하게 새로고침시 트윗 다시 보여주기 : 팔로우 취소한 사람 트윗에 대하여, 팔로우 했을때는 새 노드가 추가될 때마다 감시 대기하는 데이터베이스 구조에 수신기가 있기 때문에 바로바로 적용 됨 피드에
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
     }
     
     func configureLeftBarButton(){

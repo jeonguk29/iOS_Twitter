@@ -194,8 +194,10 @@ extension FeedController: TweetCellDelegate {
             
             // 트윗이 좋아요인 경우에만 업로드 알림
             guard cell.tweet?.didLike == true else { return }
-            NotificationService.shared.uploadNotification(type: .like, tweet: cell.tweet)
             
+            NotificationService.shared.uploadNotification(toUser: tweet.user,
+                                                                      type: .like,
+                                                                      tweetID: tweet.tweetID)
         }
         
     }

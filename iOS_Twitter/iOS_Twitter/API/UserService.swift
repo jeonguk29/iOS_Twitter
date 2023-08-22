@@ -121,4 +121,15 @@ struct UserService {
             }
         }
     }
+    
+    // 프로필 편집에서 사용자 데이터 저장 하는 메서드
+    func saveUserData(user: User, completion: @escaping(DatabaseCompletion)) {
+           guard let uid = Auth.auth().currentUser?.uid else { return }
+
+           let values = ["fullname": user.fullname,
+                         "username": user.username,
+                         "bio": user.bio ?? ""]
+
+           REF_USERS.child(uid).updateChildValues(values, withCompletionBlock: completion)
+       }
 }

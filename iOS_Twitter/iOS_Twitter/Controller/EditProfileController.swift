@@ -8,6 +8,11 @@
 import UIKit
 
 private let reuseIdentifier = "EditProfileCell"
+protocol EditProfileControllerDelegate: class {
+    
+    // 데이터 수정후 데이터 베이스 변경은 되지만 피드와 현제 수정후 변환된 값으로 리로드를 하기위한 프로토콜
+    func controller(_ controller: EditProfileController, wantsToUpdate user: User)
+}
 
 class EditProfileController: UITableViewController {
 
@@ -15,6 +20,11 @@ class EditProfileController: UITableViewController {
     private var user: User
     private lazy var headerView = EditProfileHeader(user: user)
     private let imagePicker = UIImagePickerController()
+    
+    
+    private var userInfoChanged = false
+    weak var delegate: EditProfileControllerDelegate?
+    
     private var selectedImage: UIImage? {
         didSet { headerView.profileImageView.image = selectedImage }
     }
@@ -45,10 +55,20 @@ class EditProfileController: UITableViewController {
 
     @objc func handleDone() {
 //        dismiss(animated: true, completion: nil)
+        updateUserData()
     }
 
 
     // MARK: - API
+    
+    func updateUserData() {
+        UserService.shared.saveUserData(user: user) { (err, ref) in
+            print("DEBUG: Did update user info..")
+            self.delegate?.controller(self, wantsToUpdate: self.user)
+            // 업데이트후 리로드를 위해 위임
+        }
+    }
+    
 
     // MARK: - Helpers
     func configureNavigationBar() {
@@ -151,6 +171,8 @@ extension EditProfileController: EditProfileCellDelegate {
     func updateUserInfo(_ cell: EditProfileCell) {
         
         guard let viewModel = cell.viewModel else { return }
+        userInfoChanged = true
+        navigationItem.rightBarButtonItem?.isEnabled = true
         
         switch viewModel.option {
             

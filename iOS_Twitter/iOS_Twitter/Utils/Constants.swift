@@ -31,3 +31,6 @@ let REF_NOTIFICATIONS = DB_REF.child("notifications")
 
 // tweet replies : 프로필에서 답글 남긴 트윗을 보여주기 위함 
 let REF_USER_REPLIES = DB_REF.child("user-replies")
+
+// mentions && hashtags
+let REF_USER_USERNAMES = DB_REF.child("user-usernames")

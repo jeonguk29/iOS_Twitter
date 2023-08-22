@@ -6,13 +6,14 @@
 //
 
 import UIKit
-
+import ActiveLabel
 
 // 프로토콜을 만들어서 현제 내 트윗셀을 내 컨트롤러로 전달할 것임
 protocol TweetCellDelegate: class {
     func handelProfileImageTapped(_ cell: TweetCell) // 컨트롤러에게 위임할 작업을 명시
     func handleReplyTapped(_ cell: TweetCell)
     func handleLikeTapped(_ cell: TweetCell) // 트윗 좋아요 동작처리를 위임할 메서드
+    func handleFetchUser(withUsername username: String) // 사용자 이름에 대하여 uid를 가져오는 메서드 
 }
 
 class TweetCell:UICollectionViewCell {
@@ -45,18 +46,21 @@ class TweetCell:UICollectionViewCell {
     }()
     
     // 누구에게 답글 남기는지 표시하기 위한 라벨
-    private let replyLabel: UILabel = {
-        let label = UILabel()
+    private let replyLabel: ActiveLabel = {
+        let label = ActiveLabel()
         label.textColor = .lightGray
         label.font = UIFont.systemFont(ofSize: 12)
+        label.mentionColor = .twitterBlue
         return label
     }()
     
-    private let captionLabel: UILabel = {
-        let label = UILabel()
+    private let captionLabel: ActiveLabel = {
+        let label = ActiveLabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.numberOfLines = 0 // 여러줄 표시 가능 하게
         label.text = "Test caption"
+        label.mentionColor = .twitterBlue
+        label.hashtagColor = .twitterBlue
         return label
     }()
     
@@ -143,6 +147,7 @@ class TweetCell:UICollectionViewCell {
         addSubview(underlineView)
         underlineView.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 1)
         
+        configureMentionHandler()
     }
     
     required init?(coder: NSCoder) {
@@ -194,6 +199,13 @@ class TweetCell:UICollectionViewCell {
         
         replyLabel.isHidden = viewModel.shouldHideReplyLabel
         replyLabel.text = viewModel.replyText
+    }
+    
+    func configureMentionHandler() {
+        captionLabel.handleMentionTap { [weak self] username in
+            print("사용자의 프로필로 이동 \(username)")
+            self?.delegate?.handleFetchUser(withUsername: username)
+        }
     }
     
 }

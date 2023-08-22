@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import ActiveLabel
 
 // 작업 시트를 위해 위임할 프로토콜 생성
 protocol TweetHeaderDelegate: class {
     func showActionSheet()
+    func handleFetchUser(withUsername username: String)
 }
 
 class TweetHeader: UICollectionReusableView {
@@ -56,11 +58,13 @@ class TweetHeader: UICollectionReusableView {
     }()
     
     // 내용 표시
-    private let captionLabel: UILabel = {
-        let label = UILabel()
+    private let captionLabel: ActiveLabel = {
+        let label = ActiveLabel()
         label.font = UIFont.systemFont(ofSize: 20)
         label.numberOfLines = 0
         label.text = "Some test caption from spiderman for now"
+        label.mentionColor = .twitterBlue
+        label.hashtagColor = .twitterBlue
         return label
     }()
     
@@ -89,12 +93,14 @@ class TweetHeader: UICollectionReusableView {
     
     
     // 답글 라벨
-    private let replyLabel: UILabel = {
-           let label = UILabel()
-           label.textColor = .lightGray
-           label.font = UIFont.systemFont(ofSize: 12)
-           return label
-       }()
+    private let replyLabel: ActiveLabel = {
+        let label = ActiveLabel()
+        label.textColor = .lightGray
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.mentionColor = .twitterBlue
+        label.hashtagColor = .twitterBlue
+        return label
+    }()
     
     private lazy var likesLabel =  UILabel()
     
@@ -198,6 +204,9 @@ class TweetHeader: UICollectionReusableView {
         actionStack.centerX(inView: self) // 현제 메인 뷰의 가운데 정렬
         actionStack.anchor(top: statsView.bottomAnchor, paddingTop: 16)
         // 왼쪽 지점에 위치, 그다음 간격(패딩) 정하기
+        
+        
+        configureMentionHandler()
     }
     
     required init?(coder: NSCoder) {
@@ -265,6 +274,14 @@ class TweetHeader: UICollectionReusableView {
         button.tintColor = .darkGray
         button.setDimensions(width: 20, height: 20)
         return button
+    }
+    
+    // 언급 사용자 누를때 사용자 프로필로 이동
+    func configureMentionHandler() {
+        captionLabel.handleMentionTap { [weak self] username in
+            print("사용자의 프로필로 이동 \(username)")
+            self?.delegate?.handleFetchUser(withUsername: username)
+        }
     }
     
 }

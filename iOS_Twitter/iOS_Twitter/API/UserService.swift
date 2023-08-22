@@ -155,4 +155,17 @@ struct UserService {
 
            REF_USERS.child(uid).updateChildValues(values, withCompletionBlock: completion)
        }
+    
+    
+    // 사용자 언급 : 사용자 이름을 기반으로 사용자의 uid를 가져오고 해당 사용자의 프로필로 이동하기 위한 메서드
+    /*
+     현제 우리의 사용자가 1000명 이상이라면 user안을 다 뒤지는 것은 비효율 적임
+     그래서 에초에 사용자가 생성될때 해당 사용자의 이름과 uid를 키와 벨류로 잡고 따로 문서를 만들어 줄거임
+     */
+    func fetchUser(WithUsername username: String, completion: @escaping(User) -> Void) {
+        REF_USER_USERNAMES.child(username).observeSingleEvent(of: .value) { snapshot in
+            guard let uid = snapshot.value as? String else { return }
+            self.fetchUser(uid: uid, completion: completion)
+        }
+    }
 }

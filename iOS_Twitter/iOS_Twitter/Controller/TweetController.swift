@@ -137,6 +137,15 @@ extension TweetController: UICollectionViewDelegateFlowLayout {
 // MARK: - TweetHeaderDelegate
 // 사용자 작업 시트를 위한 프로토콜을 채택하여 구현
 extension TweetController: TweetHeaderDelegate {
+    
+    // 헤더에서 언급 사용자 클릭시 처리 구현
+    func handleFetchUser(withUsername username: String) {
+        UserService.shared.fetchUser(WithUsername: username) { user in
+            let controller = ProfileController(user: user)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+    }
+    
     func showActionSheet() {
         // 현재 사용자가 아닌 경우 해당 사용자를 팔로우하고 있는지 확인하는 부분
         if tweet.user.isCurrentUser {

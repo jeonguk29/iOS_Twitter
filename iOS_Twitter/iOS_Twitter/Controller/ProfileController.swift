@@ -182,7 +182,12 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
     //컬렉션 뷰의 헤더 만들기
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         
-        return CGSize(width: view.frame.width, height: 350)
+        var height: CGFloat = 300.0 // 기본 높이
+        
+        if (user.bio ?? "") != "" { // 소개 글이 있을때 높이를 설정 
+            height = 350.0
+        }
+        return CGSize(width: view.frame.width, height: height)
     }
     
     

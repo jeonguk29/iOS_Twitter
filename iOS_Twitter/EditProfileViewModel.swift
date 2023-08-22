@@ -52,6 +52,10 @@ struct EditProfileViewModel {
         return option != .bio
     }
 
+    var shouldHidePlaceholderLabel: Bool {
+          return user.bio != nil // 값이 있다면 기본 표시되는 라벨 값 숨기기 
+      }
+    
     //이 뷰 모델은 데이터를 설정하기 위해 이 두 가지가 모두 필요
     // 각 셀의 title 제목을 넣기 위해 + 제목에 해당하는 실제 사용자 값을 넣기 위해
     init(user: User, option: EditProfileOptions) {

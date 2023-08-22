@@ -122,6 +122,29 @@ struct UserService {
         }
     }
     
+    // 사용자 프로필 이미지를 업데이트 하기위한 메서드
+    func updateProfileImage(image: UIImage, completion: @escaping(URL?) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        //이미지를 Jpeg 데이터로 변환한 다음 해당 이미지 데이터를 업로드하는 방법
+        guard let imageData = image.jpegData(compressionQuality: 0.3) else { return }
+        
+        let filename = NSUUID().uuidString
+        let ref = STORAGE_PROFILE_IMAGE.child(filename)
+        
+        ref.putData(imageData, metadata: nil) { (meta, err) in
+            ref.downloadURL { (url, error) in
+                guard let profileImageURL = url?.absoluteString else { return }
+                
+                let values = ["profileImageUrl": profileImageURL]
+                //이미지 업로드 후 받아온 url을 다시 사용자 프로필 url로 업데이트
+                REF_USERS.child(uid).updateChildValues(values) { (err, ref) in
+                    completion(url)// 업데이트한 이미지를 다시 사용자의 화면에 보여주기위해 url을 전달
+                }
+            }
+        }
+    }
+    
     // 프로필 편집에서 사용자 데이터 저장 하는 메서드
     func saveUserData(user: User, completion: @escaping(DatabaseCompletion)) {
            guard let uid = Auth.auth().currentUser?.uid else { return }

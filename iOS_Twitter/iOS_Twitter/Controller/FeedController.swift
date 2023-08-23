@@ -46,6 +46,14 @@ class FeedController: UICollectionViewController{
         fetchTweets()
     }
     
+    // 자신의 프로필 이미지 누를시 프로필로 이동 
+    @objc func handleProfileImageTap() {
+        guard let user = user else { return }
+        
+        let controller = ProfileController(user: user)
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
     // MARK: - API
     func fetchTweets(){
         collectionView.refreshControl?.beginRefreshing() // 새로고침 컨트롤러 추가
@@ -106,6 +114,11 @@ class FeedController: UICollectionViewController{
         profileImageView.layer.masksToBounds = true
         
         profileImageView.sd_setImage(with: user.profileImageUrl, completed: nil)
+        
+        // 피드에서 자신의 프로파일 이미지 누를시 사용자 프로필로 이동
+        profileImageView.isUserInteractionEnabled = true // 이미지 뷰는 기본으로 false로 설정이라 해줘야함 터치 인식 가능하게
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleProfileImageTap))
+                profileImageView.addGestureRecognizer(tap)
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: profileImageView)
     }

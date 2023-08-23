@@ -19,6 +19,7 @@ class EditProfileController: UITableViewController {
     // MARK: - Properties
     private var user: User
     private lazy var headerView = EditProfileHeader(user: user)
+    private lazy var footerView = EditProfileFooter()
     private let imagePicker = UIImagePickerController()
     
     
@@ -140,7 +141,11 @@ class EditProfileController: UITableViewController {
             tableView.tableHeaderView = headerView
             headerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 180)
             headerView.delegate = self
-            tableView.tableFooterView = UIView()
+            
+            // 풋터 설정
+            tableView.tableFooterView = footerView
+            footerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
+            footerView.delegate = self
             
             // 셀등록
             tableView.register(EditProfileCell.self, forCellReuseIdentifier: reuseIdentifier)
@@ -233,3 +238,9 @@ extension EditProfileController: EditProfileCellDelegate {
     }
 }
 
+// MARK: - EditProfileFooterDelegate
+extension EditProfileController: EditProfileFooterDelegate {
+    func handleLogout() {
+
+    }
+}

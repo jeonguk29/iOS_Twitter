@@ -10,10 +10,19 @@ import FirebaseAuth
 import FirebaseCore
 import FirebaseDatabase
 
+
+enum ActionButtonConfiguration { // 모든 탭에 올라와 있는 액션버튼의 형태를 변경하기 위한 enum 타입
+    case tweet
+    case message
+}
+
 class MainTabController: UITabBarController {
 
     
     // MARK: - Properties
+    
+    private var buttonConfig: ActionButtonConfiguration = .tweet // 기본은 tweet 형태
+    
     
     // 사용자 설정시 즉 사용자를 불러오면 아래 블럭이 실행됨 : 사용자가 실제로 값을 가지고 있고 값이 설정되면 실행된다는것을 보장
     var user: User? { // 변경이 일어나면 아래 메세지를 출력
@@ -82,8 +91,17 @@ class MainTabController: UITabBarController {
     
     // MARK: - Selectors
     @objc func actionButtonTapped(){
-        guard let user = user else {return}
-        let controller = UploadTweetController(user: user, config: .tweet)
+        
+        let controller: UIViewController
+        
+        switch buttonConfig { // 상태에 따른 각 액션을 다르게 처리할 컨트롤러를 호출 
+        case .message:
+            controller = SearchController(config: .messages)
+        case .tweet:
+            guard let user = user else { return }
+            controller = UploadTweetController(user: user, config: .tweet)
+        }
+        
         let nav = UINavigationController(rootViewController: controller)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true, completion: nil)
@@ -92,6 +110,9 @@ class MainTabController: UITabBarController {
     
     // MARK: - Helpers
     func configureUI() {
+        self.delegate = self
+        
+        
         view.addSubview(actionButton)
 //        actionButton.translatesAutoresizingMaskIntoConstraints = false
 //        actionButton.heightAnchor.constraint(equalToConstant: 56).isActive = true
@@ -116,7 +137,7 @@ class MainTabController: UITabBarController {
         let nav1 = templeteNavigationController(image: UIImage(named: "home_unselected"), rootViewController: feed)
         
         
-        let explore = ExploreController()
+        let explore = SearchController(config: .userSearch)
         let nav2 = templeteNavigationController(image: UIImage(named: "search_unselected"), rootViewController: explore)
         
         let notifications = NotificationsController()
@@ -149,4 +170,16 @@ class MainTabController: UITabBarController {
     
     // 현제 탭바안에 각 뷰컨트롤러들을 연결 하였고 각 뷰컨트롤러마다 네비게이션컨틀롤러를
     // 연결하고 설정을 해주었음 네비게이션을 만들때마다 코드를 반복하지 않기 위해 함수를 만들어줌
+}
+
+extension MainTabController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController,
+                          didSelect viewController: UIViewController) {
+        let index = viewControllers?.firstIndex(of: viewController)
+        // 각 탭을 선택할때마다 첫번째 인덱스가 나와서 0,1,2,3을 받을 수 있음
+        
+        let image = index == 3 ? UIImage(named: "mail") : UIImage(named: "new_tweet")
+        actionButton.setImage(image, for: .normal)
+        buttonConfig = index == 3 ? .message : .tweet // 상태도 바꿔주기
+    }
 }

@@ -9,8 +9,14 @@ import UIKit
 
 private let reuseIdentifier = "UserCell"
 
-class ExploreController: UITableViewController{
+enum SearchControllerConfiguration {
+    case messages // 메세지를 보낼때
+    case userSearch // 사용자를 검색할때 구분하기 위함 ExploreController를 재사용하기 때문임
+}
+
+class SearchController: UITableViewController{
     // MARK: - Properties
+    private let config: SearchControllerConfiguration
     
     private var users = [User]() {
         didSet{ tableView.reloadData() }
@@ -30,6 +36,17 @@ class ExploreController: UITableViewController{
     private let searchController = UISearchController(searchResultsController: nil)
     
     // MARK: - Lifecycle
+    
+    init(config: SearchControllerConfiguration) {
+        self.config = config
+        super.init(style: .plain)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -59,15 +76,25 @@ class ExploreController: UITableViewController{
         }
     }
     
+    
+    // MARK: - Selectors
+       @objc func handleDismissal() {
+           dismiss(animated: true, completion: nil)
+       }
+    
     // MARK: - Helpers
     func configureUI() {
         view.backgroundColor = .white
-        navigationItem.title = "Explore"
+        navigationItem.title = config == .messages ? "New Message" : "Explore"
         
         //  재사용 셀에 재사용 식별자 등록
         tableView.register(UserCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.rowHeight = 60
         tableView.separatorStyle = .none // 셀 사이에 구분선이 보이지 않게 설정
+        
+        if config == .messages { //messages일때 cancel버튼 활성화 
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(handleDismissal))
+        }
     }
     
     func configureSearchController(){
@@ -83,7 +110,7 @@ class ExploreController: UITableViewController{
 
 // MARK: - UITableViewDelegate/DataSource
 
-extension ExploreController {
+extension SearchController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return inSearchMode ? fileteredUsers.count : users.count
         // 검색모드면 필터링된 사용자의 계수에 따라 셀을 보여줌 , 그게 아니면 전체 사용자들을 보여줘
@@ -123,7 +150,7 @@ extension ExploreController {
 
 // MARK: - UISearchResultsUpdating
 
-extension ExploreController: UISearchResultsUpdating {
+extension SearchController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text?.lowercased() else {return}
         //print("DEBUG: Search text is \(searchText)")

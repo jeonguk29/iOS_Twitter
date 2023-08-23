@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseCore
+import FirebaseDatabase
 
 private let reuseIdentifier = "TweetCell"
 private let headerIdentifier = "ProfileHeader"
@@ -280,6 +283,19 @@ extension ProfileController: ProfileHeaderDelegate {
 
 // MARK: - EditProfileControllerDelegate
 extension ProfileController: EditProfileControllerDelegate {
+    
+    func handleLogout() {// 로그인 처리를 위임받아 처리
+            do {
+                try Auth.auth().signOut()
+
+                let nav = UINavigationController(rootViewController: LoginController())
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true, completion: nil)
+            } catch let error {
+                print("Couldn't make logout with error \(error.localizedDescription)")
+            }
+        }
+    
     func controller(_ controller: EditProfileController, wantsToUpdate user: User) {
         controller.dismiss(animated: true, completion: nil)
         self.user = user

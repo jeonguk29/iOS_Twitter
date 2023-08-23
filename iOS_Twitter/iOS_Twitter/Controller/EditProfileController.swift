@@ -12,6 +12,7 @@ protocol EditProfileControllerDelegate: class {
     
     // 데이터 수정후 데이터 베이스 변경은 되지만 피드와 현제 수정후 변환된 값으로 리로드를 하기위한 프로토콜
     func controller(_ controller: EditProfileController, wantsToUpdate user: User)
+    func handleLogout() // 로그아웃 버튼 클릭시 로그인 화면으로 돌아가기위한 메서드
 }
 
 class EditProfileController: UITableViewController {
@@ -241,6 +242,21 @@ extension EditProfileController: EditProfileCellDelegate {
 // MARK: - EditProfileFooterDelegate
 extension EditProfileController: EditProfileFooterDelegate {
     func handleLogout() {
-
+        
+        // 로그아웃을 위한 Alert창 보여주기
+        let alert = UIAlertController(title: nil,
+                                      message: "Are you sure you want to log out?",
+                                      preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { _ in
+            self.dismiss(animated: true) { // 현제 보여지는 화면을 사라지게 하고
+                self.delegate?.handleLogout()// 로그아웃 로직을 처리
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
     }
 }
+

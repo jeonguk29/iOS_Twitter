@@ -78,15 +78,7 @@ class MainTabController: UITabBarController {
             fetchUser()
         }
     }
-    
-    func logUserOut(){ // 로그인 확인을 하기 위한 임시 함수
-        do {
-            try Auth.auth().signOut()
-            print("DEBUG: 유저가 로그아웃 했습니다.")
-        }catch let error {
-            print("DEBUG: Failed to sign out with error \(error.localizedDescription)")
-        }
-    }
+   
     
     // MARK: - Selectors
     @objc func actionButtonTapped(){

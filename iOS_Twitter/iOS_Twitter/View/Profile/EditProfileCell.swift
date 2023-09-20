@@ -42,7 +42,7 @@ class EditProfileCell: UITableViewCell {
         let tv = InputTextView()
         tv.font = UIFont.systemFont(ofSize: 14)
         tv.textColor = .twitterBlue
-        tv.placeholderLabel.text = "Bio"
+        tv.placeholderLabel.text = "안녕하세요!!"
         return tv
     }()
     // MARK: - Lifecycle

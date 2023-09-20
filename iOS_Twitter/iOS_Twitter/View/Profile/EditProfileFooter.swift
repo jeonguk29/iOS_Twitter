@@ -19,7 +19,7 @@ class EditProfileFooter: UIView {
         button.setTitle("Logout", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        button.backgroundColor = .red
+        button.backgroundColor = .twitterBlue
         button.layer.cornerRadius = 5
         button.addTarget(self, action: #selector(handleLogout), for: .touchUpInside)
 

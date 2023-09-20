@@ -42,9 +42,10 @@ class NotificationCell: UITableViewCell {
     
     private lazy var followButton: UIButton = {
             let button = UIButton(type: .system)
-            button.setDimensions(width: 92, height: 32)
-            button.layer.cornerRadius = 32 / 2
+            button.setDimensions(width: 62, height: 18)
+            button.layer.cornerRadius = 18 / 2
             button.setTitle("Loading", for: .normal)
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 10)
             button.setTitleColor(.twitterBlue, for: .normal)
             button.backgroundColor = .white
             button.layer.borderColor = UIColor.twitterBlue.cgColor

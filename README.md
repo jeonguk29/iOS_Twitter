@@ -1,6 +1,6 @@
 # <b>🔥 Twitter revival Repository 🔥</b>
 
-<img width="120" height="120" border:0px src="https://github.com/jeonguk29/iOS_Twitter/assets/54401641/4bcc3d40-3fd3-4a19-9a58-a18bbcd3f9fe">
+<img width="150" height="150" border:0px src="https://github.com/jeonguk29/iOS_Twitter/assets/54401641/4bcc3d40-3fd3-4a19-9a58-a18bbcd3f9fe">
 
 ## <b> 🗂️ Contents </b>
 

@@ -92,7 +92,7 @@ class SearchController: UITableViewController{
         tableView.rowHeight = 60
         tableView.separatorStyle = .none // 셀 사이에 구분선이 보이지 않게 설정
         
-        if config == .messages { //messages일때 cancel버튼 활성화 
+        if config == .messages { //messages일때 cancel버튼 활성화
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(handleDismissal))
         }
     }

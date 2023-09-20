@@ -85,7 +85,7 @@ class ProfileHeader: UICollectionReusableView {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
         label.numberOfLines = 3 // 최대 3줄까지만
-        label.text = "hihihihihi is jjk App"
+        label.text = "안녕!!"
         return label
     }()
     

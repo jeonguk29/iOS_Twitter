@@ -1,4 +1,4 @@
-![1](https://github.com/jeonguk29/iOS_Twitter/assets/54401641/f9fd77ba-ddc7-4a69-885b-19b6e0acc13e)# <b>🔥 Twitter revival Repository >🔥</b>
+# <b>🔥 Twitter revival Repository >🔥</b>
 
 <img src="https://github.com/jeonguk29/iOS_Twitter/assets/54401641/4bcc3d40-3fd3-4a19-9a58-a18bbcd3f9fe">
 
@@ -36,34 +36,32 @@
 
 <h2 id="3">🏙 Result</h2>
 
-LogIn + SignUp views.
+LogIn + SignUp view.
 <p float="left">  
 <img width="40%" src="https://github.com/jeonguk29/resume/assets/54401641/89d5782d-e2c0-4e3c-b233-4afc3d1a2725">
-<img width="40%" src="[https://github.com/jeonguk29/resume/assets/54401641/aae1272b-23a7-45ad-afe1-7e101313878e">
+<img width="40%" src="https://github.com/jeonguk29/resume/assets/54401641/aae1272b-23a7-45ad-afe1-7e101313878e">
 </p>
 
 
-Feed + Search controllers
+Feed + Search view.
 <p float="left">  
-<img width="40%" src="https://user-images.githubusercontent.com/30336663/140635943-b4361df2-cf61-4d94-aef4-957e3f655a36.jpg">
-<img width="40%" src="https://user-images.githubusercontent.com/30336663/140635950-fecd1d26-ea59-473d-8c1e-371f5cd96c13.jpg">
+<img width="40%" src="https://github.com/jeonguk29/resume/assets/54401641/413db1b6-333c-4b6a-868b-04dd1469d062">
+<img width="40%" src="https://github.com/jeonguk29/resume/assets/54401641/e57ff6d1-064f-4ca9-99c9-cafde9a2065b">
 </p>
 
 
-Notifications controller
+Notifications view.
 <p float="left">  
-<img width="40%" src="https://user-images.githubusercontent.com/30336663/140635943-b4361df2-cf61-4d94-aef4-957e3f655a36.jpg">
-<img width="40%" src="https://user-images.githubusercontent.com/30336663/140635950-fecd1d26-ea59-473d-8c1e-371f5cd96c13.jpg">
+<img width="40%" src="https://github.com/jeonguk29/resume/assets/54401641/2d50a6e5-1f22-4032-a7b8-2a2525890e0e">
 </p>
 
-Profile controller
+Profile view.
 <p float="left">  
-<img width="40%" src="https://user-images.githubusercontent.com/30336663/140635943-b4361df2-cf61-4d94-aef4-957e3f655a36.jpg">
-<img width="40%" src="https://user-images.githubusercontent.com/30336663/140635950-fecd1d26-ea59-473d-8c1e-371f5cd96c13.jpg">
+<img width="40%" src="https://github.com/jeonguk29/resume/assets/54401641/a9a78050-20a5-4d09-900a-04dbb699d017">
+<img width="40%" src="https://github.com/jeonguk29/resume/assets/54401641/2b17f223-983c-4dcb-bb5f-c39dfbe49dba">
 </p>
 
-Edit Profile controller
+Edit Profile view.
 <p float="left">
-<img width="40%" src="https://user-images.githubusercontent.com/30336663/140635943-b4361df2-cf61-4d94-aef4-957e3f655a36.jpg">
-<img width="40%" src="https://user-images.githubusercontent.com/30336663/140635950-fecd1d26-ea59-473d-8c1e-371f5cd96c13.jpg">
+<img width="40%" src="https://github.com/jeonguk29/resume/assets/54401641/dabd407b-1075-4673-8f3b-5647d9986a9b">
 </p>
